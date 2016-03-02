@@ -4,9 +4,36 @@ import Router, { Link, RouteHandler } from "react-router";
 import {Navbar, Nav, NavItem, NavDropdown, MenuItem, ProgressBar} from "react-bootstrap";
 import $ from "jQuery";
 import classNames from "classnames";
+import Parse from "parse";
+import ParseReact from "parse-react";
+
+var CommentBlockCustomSFDSF = React.createClass({
+  mixins: [ParseReact.Mixin], // Enable query subscriptions
+
+  observe: function() {
+    // Subscribe to all Comment objects, ordered by creation date
+    // The results will be available at this.data.comments
+    return {
+      comments: (new Parse.Query('Service'))
+    };
+  },
+
+  render: function() {
+    // Render the text of each comment as a list item
+    return (
+      <ul>
+        {this.data.comments.map(function(c) {
+          return <li>{c.objectId}</li>;
+        })}
+      </ul>
+    );
+  }
+});
 
 var HomePage = React.createClass({
-    
+   mixins: [Router.Navigation],
+  
+  
   componentWillMount: function() {
     this.setState({Height: $(window).height()});
   },
@@ -23,7 +50,16 @@ var HomePage = React.createClass({
 
   getInitialState: function(){
     
-    return {
+    if ( Parse.User.current() == null ){
+    
+      this.transitionTo('login', {});
+    
+        console.log("ALLER");
+    }
+    
+        console.log(Parse.User.current())
+        
+          return {
       uiElementsCollapsed: true,
       chartsElementsCollapsed: true,
       multiLevelDropdownCollapsed: true,
@@ -42,14 +78,16 @@ var HomePage = React.createClass({
     }
   },
 
+
   render: function() {
 
     return (
         <div id="wrapper" className="content">
 
           <Navbar brand={<span><img src={require('../../../common/img/logo.png')} alt="Start React" title="Start React" />
-            <span>&nbsp;SB Admin React - </span>
+            <span>&nbsp;SB Admin React - Poney</span>
             <a href="http://startreact.com/" title="Start React" rel="home">StartReact.com</a>
+            <CommentBlockCustomSFDSF />
             <button type="button" className="navbar-toggle" onClick={this.toggleMenu} style={{position: 'absolute', right: 0, top: 0}}>
               <span className="sr-only">Toggle navigation</span>
               <span className="icon-bar"></span>

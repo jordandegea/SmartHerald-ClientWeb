@@ -9,6 +9,8 @@ import "babel-core/polyfill";
 // Libraries
 import React from "react";
 import Router from "react-router";
+import Parse from "parse";
+import ParseReact from "parse-react";
 
 
 // Base styling
@@ -72,6 +74,11 @@ let fetchData = function(routes, params) {
   ).then(() => data);
 }*/
 
+Parse.initialize("KpLtR3yABQAfnEckBTzkBkETGEYXKMZIpqPauLz7", "ffPoP61Lln1f0xaZvqHJfI3VZ7cDLD6CM1pP2OHI");
+Parse.User.current() 
+//Parse.initialize("com.sinenco.sharednews", "Q4RYKBphoPHRSM6ZKRztYFjpvAMte563cyx88xtb");
+//Parse.serverURL = "http://parseserver-8vd82-env.us-west-2.elasticbeanstalk.com/parse"
+//
 // Start the router
 Router.run(routes, function(Handler) {
   React.render(<Handler />, document.getElementById(DOM_APP_EL_ID));

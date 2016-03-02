@@ -1,6 +1,9 @@
+/* global Parse */
+
 import React from 'react';
 import Router from 'react-router';
 import {Panel, Input, Button} from 'react-bootstrap';
+import Parse from "parse"
 
 var LoginPage = React.createClass({
 
@@ -66,10 +69,21 @@ var LoginPage = React.createClass({
   },
 
   handleLogin: function(e){
-
-    this.transitionTo('dashboard');
-
-    return false;
+    
+    e.stopPropagation();
+    e.preventDefault();
+    
+    var self = this;
+    Parse.User.logIn(this.state.loginID, this.state.password, {
+      success: function(user) {
+          console.log("good");
+        self.transitionTo('dashboard');
+      },
+      error: function(user, error) {
+          console.log(error);
+      }
+    }
+    );
 
   }
 
