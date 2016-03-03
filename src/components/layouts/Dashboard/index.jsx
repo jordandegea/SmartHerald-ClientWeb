@@ -7,25 +7,66 @@ import classNames from "classnames";
 import Parse from "parse";
 import ParseReact from "parse-react";
 
-var CommentBlockCustomSFDSF = React.createClass({
+
+/**
+ * ServicesListHomePage
+ * 
+ * Block in the top menu
+ * Display all services editable by the client
+ */
+var ServicesListHomePage = React.createClass({
   mixins: [ParseReact.Mixin], // Enable query subscriptions
 
   observe: function() {
-    // Subscribe to all Comment objects, ordered by creation date
-    // The results will be available at this.data.comments
+    console.log(Parse.User.current().get("services"));
     return {
-      comments: (new Parse.Query('Service'))
+      services: (new Parse.Query('Service')).equalTo("owner", Parse.User.current())
     };
   },
+    
+   /* When the client will click on a service. 
+    * We change the interface by taking the new service and rerender */ 
+  changeServiceOfUser: function(serviceId){
+    var self = this ; 
+    var ServiceParseObject = Parse.Object.extend("Service");
+    var query = new Parse.Query(ServiceParseObject);
+    query.get(serviceId, {
+      success: function(service) {
+        Parse.User.current().set("defaultService", service);
+        Parse.User.current().save(null, {
+          success: function(user) {
+            self.forceUpdate();
+          },
+            error: function(object, error) {
+                // It can be good to add something to display if failed
+                console.log(error);
+            }
+        });
+      },
+        error: function(object, error) {
+            // It can be good to add something to display if failed
+            console.log(error);
 
+        }
+    });
+  },
+  
   render: function() {
-    // Render the text of each comment as a list item
+    // Render the menu with all the services available
     return (
-      <ul>
-        {this.data.comments.map(function(c) {
-          return <li>{c.objectId}</li>;
-        })}
-      </ul>
+        <NavDropdown title={Parse.User.current().attributes.defaultService.attributes.name} >
+        {
+            this.data.services.map(function(c) {
+            var boundClick = this.changeServiceOfUser.bind(this, c.objectId);
+            return (<MenuItem >
+                <Link to="dashboard" onClick={boundClick}>
+                  <i className="fa fa-user fa-fw"></i>{c.name}
+                </Link>
+              </MenuItem>);
+          }, this)
+        }
+        </NavDropdown>
+      
     );
   }
 });
@@ -51,14 +92,10 @@ var HomePage = React.createClass({
   getInitialState: function(){
     
     if ( Parse.User.current() == null ){
-    
       this.transitionTo('login', {});
-    
-        console.log("ALLER");
     }
     
-        console.log(Parse.User.current())
-        
+        console.log(Parse.User.current().attributes)
           return {
       uiElementsCollapsed: true,
       chartsElementsCollapsed: true,
@@ -87,7 +124,6 @@ var HomePage = React.createClass({
           <Navbar brand={<span><img src={require('../../../common/img/logo.png')} alt="Start React" title="Start React" />
             <span>&nbsp;SB Admin React - Poney</span>
             <a href="http://startreact.com/" title="Start React" rel="home">StartReact.com</a>
-            <CommentBlockCustomSFDSF />
             <button type="button" className="navbar-toggle" onClick={this.toggleMenu} style={{position: 'absolute', right: 0, top: 0}}>
               <span className="sr-only">Toggle navigation</span>
               <span className="icon-bar"></span>
@@ -98,97 +134,9 @@ var HomePage = React.createClass({
             <ul className="nav navbar-top-links navbar-right">
               <Nav style={ {margin: 0} }>
                 
-                <NavDropdown title=<i className="fa fa-envelope fa-fw"></i> >
-                  <MenuItem eventKey="1">
-                    <div> <strong>John Smith</strong> <span className="pull-right text-muted"> <em>Yesterday</em> </span> </div> 
-                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-
-                  </MenuItem>
-                  <MenuItem divider />
-                  <MenuItem eventKey="2">
-                    <div> <strong>John Smith</strong> <span className="pull-right text-muted"> <em>Yesterday</em> </span> </div> 
-                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div>
-                  </MenuItem>
-                  <MenuItem divider />
-                  <MenuItem eventKey="3">
-                    <div> <strong>John Smith</strong> <span className="pull-right text-muted"> <em>Yesterday</em> </span> </div> 
-                    <div>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque eleifend...</div> 
-                  </MenuItem>
-                  <MenuItem divider />
-                  <MenuItem eventKey="4">
-                    <strong>Read All Messages</strong> <i className="fa fa-angle-right"></i>
-                  </MenuItem>
-                </NavDropdown>
-
-                <NavDropdown title=<i className="fa fa-tasks fa-fw"></i> >
-                  <MenuItem eventKey="1" style={ {width: 300} }>
-                    <div> 
-                      <p> <strong>Task 1</strong> <span className="pull-right text-muted">40% Complete</span> </p> 
-                      <div>
-                        <ProgressBar active bsStyle="success" now={40} /> 
-                      </div> 
-                    </div>
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="2">
-                    <div> 
-                      <p> <strong>Task 2</strong> <span className="pull-right text-muted">20% Complete</span> </p> 
-                      <div>
-                        <ProgressBar active bsStyle="info" now={20} />
-                      </div> 
-                    </div> 
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="3">
-                    <div> 
-                      <p> <strong>Task 3</strong> <span className="pull-right text-muted">60% Complete</span> </p> 
-                      <div>
-                        <ProgressBar active bsStyle="warning" now={60} />
-                      </div> 
-                    </div> 
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="4">
-                    <div> 
-                      <p> <strong>Task 4</strong> <span className="pull-right text-muted">80% Complete</span> </p> 
-                      <div>
-                        <ProgressBar active bsStyle="danger" now={80} />
-                      </div> 
-                    </div>
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="5">
-                      <strong>See All Tasks</strong> <i className="fa fa-angle-right"></i>
-                  </MenuItem>
-                </NavDropdown>
-
-                <NavDropdown title=<i className="fa fa-bell fa-fw"></i> >
-                  <MenuItem eventKey="1" style={ {width: 300} }>
-                    <div> <i className="fa fa-comment fa-fw"></i> New Comment <span className="pull-right text-muted small">4 minutes ago</span> </div>
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="2">
-                    <div> <i className="fa fa-twitter fa-fw"></i> 3 New Followers <span className="pull-right text-muted small">12 minutes ago</span> </div>
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="3">
-                    <div> <i className="fa fa-envelope fa-fw"></i> Message Sent <span className="pull-right text-muted small">4 minutes ago</span> </div>
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="4">
-                    <div> <i className="fa fa-tasks fa-fw"></i> New Task <span className="pull-right text-muted small">4 minutes ago</span> </div>
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="5">
-                    <div> <i className="fa fa-upload fa-fw"></i> Server Rebooted <span className="pull-right text-muted small">4 minutes ago</span> </div>
-                  </MenuItem> 
-                  <MenuItem divider />
-                  <MenuItem eventKey="6">
-                    <strong>See All Alerts</strong> <i className="fa fa-angle-right"></i>
-                  </MenuItem>
-                </NavDropdown>
-
-                <NavDropdown title=<i className="fa fa-user fa-fw"></i> >
+                <ServicesListHomePage />
+                
+                <NavDropdown title={Parse.User.current().attributes.username} >
                   <MenuItem eventKey="1">
                     <i className="fa fa-user fa-fw"></i> User Profile
                   </MenuItem> 

@@ -5,6 +5,7 @@ import Router from 'react-router';
 import {Panel, Input, Button} from 'react-bootstrap';
 import Parse from "parse"
 
+
 var LoginPage = React.createClass({
 
   getInitialState: function(){
@@ -18,7 +19,6 @@ var LoginPage = React.createClass({
   mixins: [Router.Navigation],
 
   render: function(){
-  
     return <div className="col-md-4 col-md-offset-4">
 
         <div className="text-center">
@@ -68,6 +68,33 @@ var LoginPage = React.createClass({
 
   },
 
+  changeServiceOfUser: function(service){
+     var ServiceParseObject = Parse.Object.extend("Service");
+        var query = new Parse.Query(ServiceParseObject);
+        query.get(service.objectId, {
+          success: function(service) {
+            Parse.User.current().set("defaultService", service);
+            user.save(null, {
+              success: function(user) {
+                // This succeeds, since the user was authenticated on the device
+
+                // Get the user from a non-authenticated method
+                var query = new Parse.Query(Parse.User);
+                query.get(user.objectId, {
+                  success: function(userAgain) {
+
+                  }
+                });
+              }
+            });
+          },
+            error: function(object, error) {
+                console.log(error);
+
+            }
+        });
+  },
+
   handleLogin: function(e){
     
     e.stopPropagation();
@@ -75,9 +102,14 @@ var LoginPage = React.createClass({
     
     var self = this;
     Parse.User.logIn(this.state.loginID, this.state.password, {
-      success: function(user) {
-          console.log("good");
-        self.transitionTo('dashboard');
+        success: function(user) {
+        console.log(user);
+        console.log(user.get("defaultService"));
+        if ( user.get("defaultService") == undefined){
+            
+        }else{
+            self.transitionTo('dashboard');
+        }
       },
       error: function(user, error) {
           console.log(error);
