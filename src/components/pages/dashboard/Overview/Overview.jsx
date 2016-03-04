@@ -3,6 +3,22 @@ import {NavDropdown, MenuItem, DropdownButton, Navbar, Nav, NavItem, Panel, Page
 
 import StatWidget from "../../../common/StatWidget.js";
 
+
+import CounterPart from 'counterpart';
+import Translate from 'react-translate-component';
+
+CounterPart.registerTranslations('en', {
+  example: {
+    greeting: 'Hello %(name)s! How are you today?'
+  }
+});
+
+CounterPart.registerTranslations('de', {
+  example: {
+    greeting: 'Hallo, %(name)s! Wie geht\'s dir heute so?'
+  }
+});
+
 var Overview = React.createClass({
 
   render: function() {
@@ -15,7 +31,8 @@ var Overview = React.createClass({
           </div>
         </div>
 
-        <div className="row">          
+        <div className="row">    
+          <Translate {...this.props} content="example.greeting" />
         </div>
 
       </div>
