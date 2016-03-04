@@ -177,109 +177,17 @@ var HomePage = React.createClass({
                   <li>
                     <Link to="dashboard.overview"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Overview</Link>
                   </li>
+                  <li>
+                    <Link to="dashboard.messages"><i className="fa fa-envelope-o fa-fw"></i> &nbsp;Messages</Link>
+                  </li>
+                  <li>
+                    <Link to="dashboard.writemessage"><i className="fa fa-pencil-square fa-fw"></i> &nbsp;Write Message</Link>
+                  </li>
           
                   <li>
                     <Link to="dashboard.home"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Dashboard</Link>
                   </li>
-                        
-                  <li className={classNames({'active': !this.state.chartsElementsCollapsed})}>
-                    <a href="javascript:void(0)" onClick={ () => { this.setState({chartsElementsCollapsed: !this.state.chartsElementsCollapsed}); return false; } }>
-                      <i className="fa fa-bar-chart-o fa-fw"></i> &nbsp;Charts<span className="fa arrow"></span>
-                    </a>
-                    <ul className={classNames({'nav nav-second-level': true, 'collapse': this.state.chartsElementsCollapsed})}>
-                      <li>
-                        <Link to="dashboard.flot-charts">Flot Charts</Link>
-                      </li>
-                      <li>
-                        <Link to="dashboard.morrisjs-charts">Morris.js Charts</Link>
-                      </li>
-                    </ul>
-                  </li>
-              
-                  <li> 
-                    <Link to="dashboard.tables"><i className="fa fa-table fa-fw"></i> &nbsp;Tables</Link>
-                  </li> 
-              
-                  <li> 
-                    <Link to="dashboard.forms"><i className="fa fa-edit fa-fw"></i> Forms</Link> 
-                  </li>
                     
-                  <li className={classNames({'active': !this.state.uiElementsCollapsed})}> 
-                    <a href="javascript:void(0)" onClick={ () => { this.setState({uiElementsCollapsed: !this.state.uiElementsCollapsed}); return false; } }><i className="fa fa-edit fa-fw"></i> UI Elements<span className="fa arrow"></span></a> 
-
-                    <ul className={classNames({'nav nav-second-level': true, 'collapse': this.state.uiElementsCollapsed})}>
-                      <li>
-                        <Link to="dashboard.panels-wells">Panels and Wells</Link> 
-                      </li>
-                      <li>
-                        <Link to="dashboard.buttons">Buttons</Link> 
-                      </li>
-                      <li>
-                        <Link to="dashboard.notifications">Notifications</Link>
-                      </li>
-                      <li>
-                        <Link to="dashboard.typography">Typography</Link> 
-                      </li>
-                      <li>
-                        <Link to="dashboard.icons"> Icons</Link>
-                      </li>
-                      <li>
-                        <Link to="dashboard.grid">Grid</Link>
-                      </li>
-                    </ul>
-                  </li>
-                    
-                  <li className={classNames({'active': !this.state.multiLevelDropdownCollapsed})}>
-                    <a href="javascript:void(0)" onClick={ () => { this.setState({multiLevelDropdownCollapsed: !this.state.multiLevelDropdownCollapsed}); return false; } }>
-                      <i className="fa fa-sitemap fa-fw"></i>&nbsp;Multi-Level Dropdown<span className="fa arrow"></span>
-                    </a>
-                    <ul className={classNames({'nav nav-second-level': true, 'collapse': this.state.multiLevelDropdownCollapsed})}>
-                      <li>
-                        <a href="javascript:void(0)">Second Level Item</a>
-                      </li>
-                      <li>
-                        <a href="javascript:void(0)">Second Level Item</a>
-                      </li>
-                      <li className={classNames({'active': !this.state.thirdLevelDropdownCollapsed})}>
-                        <a href="javascript:void(0)" onClick={ () => { this.setState({thirdLevelDropdownCollapsed: !this.state.thirdLevelDropdownCollapsed}); return false; } }>
-                          Third Level<span className="fa arrow"></span>
-                        </a>
-                        <ul className={classNames({'nav nav-second-level': true, 'collapse': this.state.thirdLevelDropdownCollapsed})}>
-                          <li>
-                            <a href="javascript:void(0)">Third Level Item</a>
-                          </li>
-                          <li>
-                            <a href="javascript:void(0)">Third Level Item</a>
-                          </li>
-                          <li>
-                            <a href="javascript:void(0)">Third Level Item</a>
-                          </li>
-                          <li>
-                            <a href="javascript:void(0)">Third Level Item</a>
-                          </li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li> 
-                    
-                  <li className={classNames({'active': !this.state.samplePagesCollapsed})}>
-                    <a href="javascript:void(0)" onClick={ () => { this.setState({samplePagesCollapsed: !this.state.samplePagesCollapsed}); return false; } }>
-                      <i className="fa fa-files-o fa-fw"></i>&nbsp;Sample Pages<span className="fa arrow"></span>
-                    </a> 
-                    <ul className={classNames({'nav nav-second-level': true, 'collapse': this.state.samplePagesCollapsed})}>
-                      <li>
-                        <Link to="dashboard.blank">Blank Page</Link>
-                      </li>
-                      <li>
-                        <Link to="login">Login Page</Link>
-                      </li>
-                    </ul>
-                  </li>
-                    
-                  <li>
-                    <a href="http://www.strapui.com/">Premium React Themes</a>
-                  </li>
-
                 </ul>
 
               </div>

@@ -21,7 +21,7 @@ CounterPart.registerTranslations('de', {
   }
 });
 
-var Overview = React.createClass({
+var Reports = React.createClass({
 
   render: function() {
     return (
@@ -29,7 +29,7 @@ var Overview = React.createClass({
 
         <div className="row">
           <div className="col-lg-12">
-            <PageHeader>Overview</PageHeader>
+            <PageHeader>Reports</PageHeader>
           </div>
         </div>
 
@@ -43,4 +43,4 @@ var Overview = React.createClass({
 
 });
 
-export default Overview;
+export default Reports;
