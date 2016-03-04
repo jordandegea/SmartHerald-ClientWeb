@@ -175,6 +175,10 @@ var HomePage = React.createClass({
                   </li>
               
                   <li>
+                    <Link to="dashboard.overview"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Overview</Link>
+                  </li>
+          
+                  <li>
                     <Link to="dashboard.home"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Dashboard</Link>
                   </li>
                         

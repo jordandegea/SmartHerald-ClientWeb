@@ -4,6 +4,7 @@ import { Router, Route, DefaultRoute, RouteHandler, Redirect } from "react-route
 import BaseLayout from "../components/layouts/Base";
 import DashboardLayout from "../components/layouts/Dashboard";
 
+import DashboardOverviewPage from "../components/pages/dashboard/Overview";
 import DashboardHomePage from "../components/pages/dashboard/Home";
 import DashboardTablesPage from "../components/pages/dashboard/Tables";
 import DashboardFormsPage from "../components/pages/dashboard/Forms";
@@ -27,6 +28,7 @@ var Routes = React.createClass({
           <Route name="base" path="/" handler={BaseLayout}>
             <Route name="dashboard" path="/dashboard" handler={DashboardLayout}>
               <Route name="dashboard.home" path="/home" handler={DashboardHomePage} />
+              <Route name="dashboard.overview" path="/overview" handler={DashboardOverviewPage} />
               <Route name="dashboard.flot-charts" path="/flot-charts" handler={DashboardFlotChartsPage} />
               <Route name="dashboard.morrisjs-charts" path="/morrisjs-charts" handler={DashboardMorrisjsChartsPage} />
               <Route name="dashboard.tables" path="/tables" handler={DashboardTablesPage} />
