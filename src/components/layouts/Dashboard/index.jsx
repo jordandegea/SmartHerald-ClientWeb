@@ -122,8 +122,8 @@ var HomePage = React.createClass({
         <div id="wrapper" className="content">
 
           <Navbar brand={<span><img src={require('../../../common/img/logo.png')} alt="Start React" title="Start React" />
-            <span>&nbsp;SB Admin React - Poney</span>
-            <a href="http://startreact.com/" title="Start React" rel="home">StartReact.com</a>
+            <span>&nbsp;Shared News - </span>
+            <Link to="dashboard.home">Dashboard</Link>
             <button type="button" className="navbar-toggle" onClick={this.toggleMenu} style={{position: 'absolute', right: 0, top: 0}}>
               <span className="sr-only">Toggle navigation</span>
               <span className="icon-bar"></span>
@@ -142,11 +142,6 @@ var HomePage = React.createClass({
                   </MenuItem> 
                   <MenuItem eventKey="2">
                     <i className="fa fa-gear fa-fw"></i> Settings
-                  </MenuItem> 
-                  <MenuItem eventKey="3">
-                    <a href="http://www.strapui.com/" onClick={ () => { window.location='http://www.strapui.com/'; } }>
-                      <i className="fa fa-eye fa-fw"></i> Premium React Themes
-                    </a>
                   </MenuItem> 
                   <MenuItem divider />
                   <MenuItem eventKey="4">
@@ -174,6 +169,10 @@ var HomePage = React.createClass({
                     </div>
                   </li>
               
+                  
+                  <li>
+                    <Link to="dashboard.home"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Dashboard</Link>
+                  </li>
                   <li>
                     <Link to="dashboard.overview"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Overview</Link>
                   </li>
@@ -184,10 +183,6 @@ var HomePage = React.createClass({
                     <Link to="dashboard.writemessage"><i className="fa fa-pencil-square fa-fw"></i> &nbsp;Write Message</Link>
                   </li>
           
-                  <li>
-                    <Link to="dashboard.home"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Dashboard</Link>
-                  </li>
-                    
                 </ul>
 
               </div>
@@ -206,7 +201,7 @@ var HomePage = React.createClass({
 
   statics: {
     fetchData: function(params) {
-      }
+    }
   }
   
 });
