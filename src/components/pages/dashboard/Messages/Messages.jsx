@@ -53,7 +53,7 @@ var MessagesListBlock = React.createClass({
 
   observe: function() {
     return {
-      services: (new Parse.Query('Message')).equalTo("service", Parse.User.current().attributes.defaultService)
+      services: (new Parse.Query('Message')).equalTo("service", Parse.User.current().attributes.defaultService).descending("createdAt")
     };
   },
       
@@ -93,12 +93,12 @@ var MessagesListBlock = React.createClass({
                   <div className="row">
                     <div className="col-sm-9">
                       <div className="dataTables_length" id="dataTables-example_length">
-                        <label>Show 
-                        <select onChange={this.resultPerPageChangedHandler} name="dataTables-example_length" aria-controls="dataTables-example" className="form-control input-sm">
+                        <label>Show &nbsp;
+                        <select onChange={this.resultPerPageChangedHandler} name="selectEntries" aria-controls="ariaEntriesSelect" className="form-control input-sm">
                          <option value="10"  >10</option>
                          <option value="20">20</option>
                          <option value="50">50</option>
-                        </select> entries</label>
+                        </select>&nbsp; entries</label>
                       </div>
                     </div>
                     
@@ -106,21 +106,23 @@ var MessagesListBlock = React.createClass({
 
                   <div className="row">
                     <div className="col-sm-12">
-                      <table className="table table-striped table-bordered table-hover dataTable no-footer" id="dataTables-example" role="grid" aria-describedby="dataTables-example_info">
+                      <table className="table table-striped table-bordered table-hover dataTable no-footer" id="selectEntrieTable" role="grid" aria-describedby="messagesEntries">
                         <thead>
-                          <tr role="row"><th className="sorting_asc" tabIndex="0" aria-controls="dataTables-example" rowSpan="1" colSpan="1" aria-label="Rendering engine: activate to sort column descending" aria-sort="ascending" style={ {width: 265} }>Rendering engine</th><th className="sorting" tabIndex="0" aria-controls="dataTables-example" rowSpan="1" colSpan="1" aria-label="Browser: activate to sort column ascending" style={ {width: 321} }>Browser</th><th className="sorting" tabIndex="0" aria-controls="dataTables-example" rowSpan="1" colSpan="1" aria-label="Platform(s): activate to sort column ascending" style={ {width: 299} }>Platform(s)</th><th className="sorting" tabIndex="0" aria-controls="dataTables-example" rowSpan="1" colSpan="1" aria-label="Engine version: activate to sort column ascending" style={ {width: 231} }>Engine version</th><th className="sorting" tabIndex="0" aria-controls="dataTables-example" rowSpan="1" colSpan="1" aria-label="CSS grade: activate to sort column ascending" style={ {width: 180} }>CSS grade</th></tr>
-                        </thead>
+                          <tr role="row">
+                            <th>Date</th>
+                            <th>Summary</th>
+                            <th>Actions</th>
+                          </tr>
+                          </thead>
                         <tbody> 
                         {
                           displayedServices.map(function(c) {
                           
                             //var boundClick = this.changeServiceOfUser.bind(this, c.objectId);
                             return (<tr role="row">
-                                <td className="sorting_1">{c.summary}</td>
                                 <td><FormattedRelative value={c.createdAt} /></td>
-                                <td>Win 98+ / OSX.2+</td>
-                                <td className="center">1.7</td>
-                                <td className="center">A</td>
+                                <td>{c.summary}</td>
+                                <td></td>
                               </tr>);
                           }, this)
                         }
