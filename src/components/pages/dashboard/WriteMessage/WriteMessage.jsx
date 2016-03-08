@@ -1,7 +1,7 @@
 /* global CounterPart */
 
 import React, { PropTypes, Component } from 'react';
-import {NavDropdown, MenuItem, DropdownButton, Navbar, Nav, NavItem, Panel, PageHeader, ListGroup, ListGroupItem, Button} from "react-bootstrap";
+import {NavDropdown, MenuItem, DropdownButton, Navbar, Nav, NavItem, Panel, PageHeader, ListGroup, ListGroupItem, Button, Input, Col, Row} from "react-bootstrap";
 
 import StatWidget from "../../../common/StatWidget.js";
 
@@ -34,7 +34,21 @@ var WriteMessage = React.createClass({
         </div>
 
         <div className="row">    
-          <Translate {...this.props} content="example.greeting" />
+          <div className="col-lg-6">
+            <Panel header={<span>Basic Form Elements</span>} >
+              <div className="row">
+                <div className="col-sm-12">
+                  <form>
+                    <Input type="textarea" label="Summary" rows="2" />
+                    
+                    <Input type="textarea" id="theeditable" label="Content of your message" rows="10" />
+                    
+                    <Button bsStyle="primary" type="submit" disabled>Disabled Button</Button>
+                  </form>
+                </div>
+              </div>
+            </Panel>
+          </div>
         </div>
 
       </div>
