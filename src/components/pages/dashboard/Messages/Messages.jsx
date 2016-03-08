@@ -26,9 +26,32 @@ CounterPart.registerTranslations('de', {
 
 var MessagesListBlock = React.createClass({
   mixins: [ParseReact.Mixin,IntlMixin], // Enable query subscriptions
+  
+  getInitialState() {
+    return {
+      currentPage : 1,
+      maxPage : 0,
+      nbResults : 0,
+      nbResultsPerPage : 10,
+    };
+  },
+  
+  
+  
+  pageChangedHandler: function(event, selectedEvent) {
+    this.setState({
+      currentPage: selectedEvent.eventKey
+    });
+  },
+
+  resultPerPageChangedHandler: function(event){
+         this.setState({
+           nbResultsPerPage: event.target.value
+         });
+  },
+
 
   observe: function() {
-    console.log(Parse.User.current().get("services"));
     return {
       services: (new Parse.Query('Message')).equalTo("service", Parse.User.current().attributes.defaultService)
     };
@@ -37,9 +60,30 @@ var MessagesListBlock = React.createClass({
   
   render: function() {
     // Render the menu with all the services available
+    this.state.nbResults = this.data.services.length; 
+    this.state.maxPage = Math.ceil(this.state.nbResults/this.state.nbResultsPerPage);
     
+    var showing = (this.state.currentPage*this.state.nbResultsPerPage)- (this.state.nbResultsPerPage-1);
+    if ( showing < 1 ){
+      showing = 1 ; 
+    }
     
+    var to = this.state.currentPage*this.state.nbResultsPerPage ;
+    if ( to > this.state.nbResults){
+      to = this.state.nbResults;
+    }
+    
+    var of = this.state.nbResults;
+                    
+    var displayedServices = [];
+    
+    var k = 0;
+    for ( var i = (showing-1) ; i < to ; i ++){
+      displayedServices[k++] = this.data.services[i];
+    }
+  
     var odd = true ;
+    
     return (
         <div className="col-lg-12"> 
           <div> 
@@ -49,14 +93,15 @@ var MessagesListBlock = React.createClass({
                   <div className="row">
                     <div className="col-sm-9">
                       <div className="dataTables_length" id="dataTables-example_length">
-                        <label>Show <select name="dataTables-example_length" aria-controls="dataTables-example" className="form-control input-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label>
+                        <label>Show 
+                        <select onChange={this.resultPerPageChangedHandler} name="dataTables-example_length" aria-controls="dataTables-example" className="form-control input-sm">
+                         <option value="10"  >10</option>
+                         <option value="20">20</option>
+                         <option value="50">50</option>
+                        </select> entries</label>
                       </div>
                     </div>
-                    <div className="col-sm-3">
-                      <div id="dataTables-example_filter" className="dataTables_filter">
-                        <label>Search:<input type="search" className="form-control input-sm" placeholder="" aria-controls="dataTables-example" /></label>
-                      </div>
-                    </div>
+                    
                   </div>
 
                   <div className="row">
@@ -67,7 +112,7 @@ var MessagesListBlock = React.createClass({
                         </thead>
                         <tbody> 
                         {
-                          this.data.services.map(function(c) {
+                          displayedServices.map(function(c) {
                           
                             //var boundClick = this.changeServiceOfUser.bind(this, c.objectId);
                             return (<tr role="row">
@@ -87,16 +132,16 @@ var MessagesListBlock = React.createClass({
                   <div className="row">
                     <div className="col-sm-6">
                       <div className="dataTables_info" id="dataTables-example_info" role="status" aria-live="polite">
-                        Showing 1 to 10 of 57 entries
+                        Showing {showing} to {to} of {of} entries
                       </div>
                     </div>
                     <div className="col-xs-12" >
                     <center>
-                      <Pagination activePage={1}
-                        items={6} perPage={10} 
+                      <Pagination activePage={this.state.currentPage}
+                        items={this.state.maxPage} perPage={this.state.nbResultsPerPage} 
                         first={true} last={true}
                         prev={true} next={true}
-                        onSelect={ (pageNumber) => {} } /> 
+                        onSelect={ this.pageChangedHandler } /> 
                                 </center>
                     </div>
                   </div>
