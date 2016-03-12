@@ -5,6 +5,7 @@ import {NavDropdown, MenuItem, DropdownButton, Navbar, Nav, NavItem, Panel, Page
 
 import StatWidget from "../../../common/StatWidget.js";
 
+import ReactQuill from 'react-quill';
 
 import CounterPart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -23,6 +24,12 @@ CounterPart.registerTranslations('de', {
 
 var WriteMessage = React.createClass({
 
+getInitialState: function() {
+    return {text:""};
+  },
+  onTextChange: function(value) {
+    this.setState({ text:value });
+  },
   render: function() {
     return (
       <div>
@@ -41,9 +48,22 @@ var WriteMessage = React.createClass({
                   <form>
                     <Input type="textarea" label="Summary" rows="2" />
                     
-                    <Input type="textarea" id="theeditable" label="Content of your message" rows="10" />
+                    <div className="form-group">
+                      <label className="control-label">Content</label>
                     
-                    <Button bsStyle="primary" type="submit" disabled>Disabled Button</Button>
+                      <ReactQuill theme="snow"
+                          onChange={this.onTextChange} >
+                        <ReactQuill.Toolbar key="toolbar"
+                            ref="toolbar"
+                            items={ReactQuill.Toolbar.defaultItems} />
+                        <div key="editor"
+                            ref="editor"
+                            className="quill-contents"
+                            style={ {height:400} } />
+                     </ReactQuill>
+                    </div>
+                    
+                    <Button bsStyle="primary" type="submit" >Save Message</Button>
                   </form>
                 </div>
               </div>
