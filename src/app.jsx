@@ -8,6 +8,7 @@ import "babel-core/polyfill";
 
 // Libraries
 import React from "react";
+import ReactDOM from "react-dom";
 import Router from "react-router";
 import Parse from "parse";
 import ParseReact from "parse-react";
@@ -83,5 +84,5 @@ Parse.User.current()
 //
 // Start the router
 Router.run(routes, function(Handler) {
-  React.render(<Handler />, document.getElementById(DOM_APP_EL_ID));
+  ReactDOM.render(<Handler />, document.getElementById(DOM_APP_EL_ID));
 });

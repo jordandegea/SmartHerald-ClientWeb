@@ -120,18 +120,24 @@ var HomePage = React.createClass({
 
     return (
         <div id="wrapper" className="content">
-
-          <Navbar brand={<span><img src={require('../../../common/img/logo.png')} alt="Start React" title="Start React" />
-            <span>&nbsp;Shared News - </span>
-            <Link to="dashboard.home">Dashboard</Link>
-            <button type="button" className="navbar-toggle" onClick={this.toggleMenu} style={{position: 'absolute', right: 0, top: 0}}>
-              <span className="sr-only">Toggle navigation</span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
-            </span>} fluid={true}  style={ {margin: 0} }>
-            <ul className="nav navbar-top-links navbar-right">
+          <Navbar fluid={true}  style={ {margin: 0} }>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <span><img src={require('../../../common/img/logo.png')} alt="Start React" title="Start React" />
+                <span>&nbsp;Shared News - </span>
+                <Link to="dashboard.home">Dashboard</Link>
+                <button type="button" className="navbar-toggle" onClick={this.toggleMenu} style={{position: 'absolute', right: 0, top: 0}}>
+                  <span className="sr-only">Toggle navigation</span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                  <span className="icon-bar"></span>
+                </button>
+                </span>
+              </Navbar.Brand>
+              <Navbar.Toggle />
+            </Navbar.Header>
+            <Navbar.Collapse>
+              <ul className="nav navbar-top-links navbar-right">
               <Nav style={ {margin: 0} }>
                 
                 <ServicesListHomePage />
@@ -153,7 +159,7 @@ var HomePage = React.createClass({
 
               </Nav>
             </ul> 
-            <div className="navbar-default sidebar" style={ { 'marginLeft': '-20px' } } role="navigation">
+            <div className="navbar-default sidebar" style={ { 'marginLeft': '-30px' } } role="navigation">
               <div className="sidebar-nav navbar-collapse">
                 
                 <ul className="nav in" id="side-menu">
@@ -187,8 +193,9 @@ var HomePage = React.createClass({
 
               </div>
             </div>
-
+            </Navbar.Collapse>
           </Navbar>
+
 
           <div id="page-wrapper" className="page-wrapper" ref="pageWrapper" style={{minHeight: this.state.Height}}>
             <RouteHandler {...this.props} />
