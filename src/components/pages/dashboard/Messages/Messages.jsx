@@ -119,8 +119,10 @@ var MessagesListBlock = React.createClass({
                           displayedServices.map(function(c) {
                           
                             //var boundClick = this.changeServiceOfUser.bind(this, c.objectId);
+                                //<td><FormattedRelative value={c.createdAt} /></td>
+                                
                             return (<tr role="row">
-                                <td><FormattedRelative value={c.createdAt} /></td>
+                                <td>{c.createdAt.toUTCString()}</td>
                                 <td>{c.summary}</td>
                                 <td></td>
                               </tr>);
