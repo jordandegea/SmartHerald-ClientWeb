@@ -27,6 +27,7 @@ var ServicesListHomePage = React.createClass({
    /* When the client will click on a service. 
     * We change the interface by taking the new service and rerender */ 
   changeServiceOfUser: function(serviceId){
+    console.log("ok");
     var self = this ; 
     var ServiceParseObject = Parse.Object.extend("Service");
     var query = new Parse.Query(ServiceParseObject);
@@ -58,10 +59,8 @@ var ServicesListHomePage = React.createClass({
         {
             this.data.services.map(function(c) {
             var boundClick = this.changeServiceOfUser.bind(this, c.objectId);
-            return (<MenuItem >
-                <Link to="dashboard" onClick={boundClick}>
+            return (<MenuItem key={c.objectId} onClick={boundClick}>
                   <i className="fa fa-user fa-fw"></i>{c.name}
-                </Link>
               </MenuItem>);
           }, this)
         }
