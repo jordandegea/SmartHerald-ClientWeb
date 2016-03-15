@@ -27,7 +27,6 @@ var ServicesListHomePage = React.createClass({
    /* When the client will click on a service. 
     * We change the interface by taking the new service and rerender */ 
   changeServiceOfUser: function(serviceId){
-    console.log("ok");
     var self = this ; 
     var ServiceParseObject = Parse.Object.extend("Service");
     var query = new Parse.Query(ServiceParseObject);

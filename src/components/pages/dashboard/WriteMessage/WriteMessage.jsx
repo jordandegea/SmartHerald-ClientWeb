@@ -40,8 +40,8 @@ getInitialState: function() {
     this.setState({ content:value });
   },
   
-  onSummaryChange: function(value) {
-    this.setState({ summary:value });
+  onSummaryChange: function(e) {
+    this.setState({ summary:e.target.value });
   },
   
   handleSubmit: function(e){
@@ -51,33 +51,38 @@ getInitialState: function() {
     
     var self = this;
     
-          console.log("mog");
     if ( this.state.messageObject === null ){
       var Message = Parse.Object.extend("Message");
       var message = new Message();
 
-          console.log("mog2");
       message.set("summary", this.state.summary);
       message.set("content", this.state.content);
       message.set("service", Parse.User.current().attributes.defaultService);
       
-          console.log("mog3");
-      message.save(null, {
-        success: function(message) {
-          console.log("mog4");
-          // Execute any logic that should take place after the object is saved.
-          alert('New object created with objectId: ' + message.id);
-          console.log(message);
-        },
-        error: function(message, error) {
-          console.log("mog5");
-          // Execute any logic that should take place if the save fails.
-          // error is a Parse.Error with an error code and message.
-          alert('Failed to create new object, with error code: ' + error.message);
-        }
-      });
-    }
+    }else{
+      var message = this.state.messageObject ;
 
+      message.set("summary", this.state.summary);
+      message.set("content", this.state.content);
+      message.set("service", Parse.User.current().attributes.defaultService);
+      
+    }
+    
+    message.save(null, {
+      success: function(message) {
+        console.log("mog4");
+        self.state.messageObject = message ;
+        // Execute any logic that should take place after the object is saved.
+        //alert('New object created with objectId: ' + message.id);
+        console.log(message);
+      },
+      error: function(message, error) {
+        console.log("mog5");
+        // Execute any logic that should take place if the save fails.
+        // error is a Parse.Error with an error code and message.
+        alert('Failed to create new object, with error code: ' + error.message);
+      }
+    });
   },
   
   render: function() {
