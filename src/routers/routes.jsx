@@ -7,6 +7,7 @@ import DashboardLayout from "../components/layouts/Dashboard";
 import DashboardHomePage from "../components/pages/dashboard/Home";
 import DashboardOverviewPage from "../components/pages/dashboard/Overview";
 import DashboardWriteMessagePage from "../components/pages/dashboard/WriteMessage";
+import DashboardEditMessagePage from "../components/pages/dashboard/WriteMessage";
 import DashboardMessagesPage from "../components/pages/dashboard/Messages";
 import DashboardReportsPage from "../components/pages/dashboard/Reports";
 
@@ -23,6 +24,7 @@ var Routes = React.createClass({
               <Route name="dashboard.home" path="/home" handler={DashboardHomePage} />
               <Route name="dashboard.messages" path="/messages" handler={DashboardMessagesPage} />
               <Route name="dashboard.writemessage" path="/writemessage" handler={DashboardWriteMessagePage} />
+              <Route name="dashboard.editmessage" path="/editmessage/:message" handler={DashboardEditMessagePage} />
               <Route name="dashboard.overview" path="/overview" handler={DashboardOverviewPage} />
               <Route name="dashboard.reports" path="/reports" handler={DashboardReportsPage} />
               

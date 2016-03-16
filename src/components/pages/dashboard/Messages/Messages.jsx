@@ -1,6 +1,9 @@
 /* global CounterPart */
 
 import React, { PropTypes, Component } from 'react';
+
+import Router, { Link, RouteHandler } from "react-router";
+
 import {Pagination, Panel, Well, Button, PageHeader} from "react-bootstrap";
 
 import StatWidget from "../../../common/StatWidget.js";
@@ -95,7 +98,7 @@ var MessagesListBlock = React.createClass({
                       <div className="dataTables_length" id="dataTables-example_length">
                         <label>Show &nbsp;
                         <select onChange={this.resultPerPageChangedHandler} name="selectEntries" aria-controls="ariaEntriesSelect" className="form-control input-sm">
-                         <option value="10"  >10</option>
+                         <option value="10">10</option>
                          <option value="20">20</option>
                          <option value="50">50</option>
                         </select>&nbsp; entries</label>
@@ -118,13 +121,17 @@ var MessagesListBlock = React.createClass({
                         {
                           displayedServices.map(function(c) {
                           
-                            //var boundClick = this.changeServiceOfUser.bind(this, c.objectId);
-                                //<td><FormattedRelative value={c.createdAt} /></td>
-                                
+                            //var boundClick = this.onEditButton.bind(this, c.objectId);
+                            
                             return (<tr role="row">
                                 <td>{c.createdAt.toUTCString()}</td>
                                 <td>{c.summary}</td>
-                                <td></td>
+                                <td>
+                                  <Link to="dashboard.editmessage" params={{ "message": c.objectId }}  >
+                                    <Button  bsStyle="warning col-xs-12 col-sm-6" bsSize="small">Edit</Button>
+                                  </Link>
+                                  <Button bsStyle="primary col-xs-12 col-sm-6" bsSize="small">Send</Button>
+                                </td>
                               </tr>);
                           }, this)
                         }
@@ -157,6 +164,10 @@ var MessagesListBlock = React.createClass({
 
       
     );
+  },
+  
+  onEditButton : function(objectId){
+    console.log(objectId);
   }
 });
 

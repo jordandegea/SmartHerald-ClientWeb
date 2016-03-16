@@ -28,7 +28,33 @@ CounterPart.registerTranslations('de', {
 
 var WriteMessage = React.createClass({
 
-getInitialState: function() {
+  getInitialState: function() {
+  
+    var self = this;
+  
+    if (this.props.params.hasOwnProperty("message")){
+      var Message = Parse.Object.extend("Message");
+      var query = new Parse.Query(Message);
+      query.get(this.props.params.message, {
+        success: function(message) {
+          
+            self.setState( { 
+              messageObject:message,
+              summary:message.attributes.summary,
+              content:message.attributes.content
+            });
+            
+            self.forceUpdate();
+            
+        },
+        error: function(message, error) {
+            //console.log(error);
+        
+            self.transitionTo('dashboard.messages');
+        }
+      });
+    }
+  
     return {
       messageObject:null,
       summary:"",
@@ -70,14 +96,12 @@ getInitialState: function() {
     
     message.save(null, {
       success: function(message) {
-        console.log("mog4");
         self.state.messageObject = message ;
         // Execute any logic that should take place after the object is saved.
         //alert('New object created with objectId: ' + message.id);
-        console.log(message);
+        //console.log(message);
       },
       error: function(message, error) {
-        console.log("mog5");
         // Execute any logic that should take place if the save fails.
         // error is a Parse.Error with an error code and message.
         alert('Failed to create new object, with error code: ' + error.message);
@@ -101,12 +125,13 @@ getInitialState: function() {
               <div className="row">
                 <div className="col-sm-12">
                   <form role="form" onSubmit={this.handleSubmit}>
-                    <Input type="textarea" label="Summary" rows="2" onChange={this.onSummaryChange}/>
+                    <Input type="textarea" label="Summary" rows="2" value={this.state.summary} onChange={this.onSummaryChange}/>
                     
                     <div className="form-group">
                       <label className="control-label">Content</label>
                     
                       <ReactQuill theme="snow"
+                        value={this.state.content}
                           onChange={this.onContentChange} >
                         <ReactQuill.Toolbar key="toolbar"
                             ref="toolbar"
