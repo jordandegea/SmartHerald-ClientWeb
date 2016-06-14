@@ -76,21 +76,21 @@ var WriteMessage = React.createClass({
     e.preventDefault();
     
     var self = this;
-    
+    var service = this.props.service.service; 
     if ( this.state.messageObject === null ){
       var Message = Parse.Object.extend("Message");
       var message = new Message();
 
       message.set("summary", this.state.summary);
       message.set("content", this.state.content);
-      message.set("service", Parse.User.current().attributes.defaultService);
+      message.set("service", service);
       
     }else{
       var message = this.state.messageObject ;
 
       message.set("summary", this.state.summary);
       message.set("content", this.state.content);
-      message.set("service", Parse.User.current().attributes.defaultService);
+      message.set("service", service);
       
     }
     

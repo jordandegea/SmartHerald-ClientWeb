@@ -22,8 +22,8 @@ var LoginPage = React.createClass({
     return <div className="col-md-4 col-md-offset-4">
 
         <div className="text-center">
-          <h1 className="login-brand-text">SB Admin React</h1>
-          <h3 className="text-muted">Created by <a href="http://startreact.com">StartReact.com</a> team</h3>
+          <h1 className="login-brand-text">SharedNews: Client Dashboard</h1>
+          <h3 className="text-muted">Created by <a href="http://sinenco.com">sinenco.com</a></h3>
         </div>
 
         <Panel header={<h3>Please Sign In</h3>} className="login-panel">
@@ -68,35 +68,7 @@ var LoginPage = React.createClass({
 
   },
 
-  changeServiceOfUser: function(service){
-     var ServiceParseObject = Parse.Object.extend("Service");
-        var query = new Parse.Query(ServiceParseObject);
-        query.get(service.objectId, {
-          success: function(service) {
-            Parse.User.current().set("defaultService", service);
-            user.save(null, {
-              success: function(user) {
-                // This succeeds, since the user was authenticated on the device
-
-                // Get the user from a non-authenticated method
-                var query = new Parse.Query(Parse.User);
-                query.get(user.objectId, {
-                  success: function(userAgain) {
-
-                  }
-                });
-              }
-            });
-          },
-            error: function(object, error) {
-                console.log(error);
-
-            }
-        });
-  },
-
   handleLogin: function(e){
-    
     e.stopPropagation();
     e.preventDefault();
     
@@ -104,12 +76,26 @@ var LoginPage = React.createClass({
     Parse.User.logIn(this.state.loginID, this.state.password, {
         success: function(user) {
         console.log(user);
-        console.log(user.get("defaultService"));
-        if ( user.get("defaultService") == undefined){
-            
-        }else{
-            self.transitionTo('dashboard');
-        }
+        /* Check if services exists */
+        var ServiceParseObject = Parse.Object.extend("ServicesOwners");
+        var query = new Parse.Query(ServiceParseObject);
+        query.include("service");
+        query.find({
+          success: function(objects) {
+            if ( objects.length > 0 ){
+                console.log(objects);
+                console.log(objects[0]);
+                self.props.service.service = objects[0].get("service");
+                console.log(self);
+                self.transitionTo('dashboard', this.props);
+            }else{
+              console.log("No service owned");
+            }
+          },
+          error: function(object, error) {
+                console.log(error);
+            }
+        })
       },
       error: function(user, error) {
           console.log(error);

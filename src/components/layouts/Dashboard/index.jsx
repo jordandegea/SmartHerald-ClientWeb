@@ -18,9 +18,8 @@ var ServicesListHomePage = React.createClass({
   mixins: [ParseReact.Mixin], // Enable query subscriptions
 
   observe: function() {
-    console.log(Parse.User.current().get("services"));
     return {
-      services: (new Parse.Query('Service')).equalTo("owner", Parse.User.current())
+      services: (new Parse.Query('ServicesOwners')).equalTo("owner", Parse.User.current()).include("service")
     };
   },
     
@@ -32,21 +31,11 @@ var ServicesListHomePage = React.createClass({
     var query = new Parse.Query(ServiceParseObject);
     query.get(serviceId, {
       success: function(service) {
-        Parse.User.current().set("defaultService", service);
-        Parse.User.current().save(null, {
-          success: function(user) {
-            self.forceUpdate();
-          },
-            error: function(object, error) {
-                // It can be good to add something to display if failed
-                console.log(error);
-            }
-        });
+        this.props.service.service = service; 
       },
         error: function(object, error) {
             // It can be good to add something to display if failed
             console.log(error);
-
         }
     });
   },
@@ -54,12 +43,12 @@ var ServicesListHomePage = React.createClass({
   render: function() {
     // Render the menu with all the services available
     return (
-        <NavDropdown title={Parse.User.current().attributes.defaultService.attributes.name} >
+        <NavDropdown title={this.props.service.service.attributes.name} >
         {
             this.data.services.map(function(c) {
-            var boundClick = this.changeServiceOfUser.bind(this, c.objectId);
-            return (<MenuItem key={c.objectId} onClick={boundClick}>
-                  <i className="fa fa-user fa-fw"></i>{c.name}
+            var boundClick = this.changeServiceOfUser.bind(this, c.get("service").objectId);
+            return (<MenuItem key={c.get("service").objectId} onClick={boundClick}>
+                  <i className="fa fa-user fa-fw"></i>{c.get("service").name}
               </MenuItem>);
           }, this)
         }
@@ -138,7 +127,7 @@ var HomePage = React.createClass({
               <ul className="nav navbar-top-links navbar-right">
               <Nav style={ {margin: 0} }>
                 
-                <ServicesListHomePage />
+                <ServicesListHomePage {...this.props} />
                 
                 <NavDropdown title={Parse.User.current().attributes.username} >
                   <MenuItem eventKey="1">

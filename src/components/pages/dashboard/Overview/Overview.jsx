@@ -20,7 +20,7 @@ var ServiceInformationBlock = React.createClass({
   getInitialState: function() {
   
     return {
-      description:Parse.User.current().attributes.defaultService.attributes.description
+      description:this.props.service.service.attributes.description
     };
   },
   
@@ -34,23 +34,25 @@ var ServiceInformationBlock = React.createClass({
     e.preventDefault();
     
     var self = this;
-    
-    var service = Parse.User.current().attributes.defaultService ;
-    
+
+    var service = this.props.service.service ;
+    console.log("loading");
     service.set("description", this.state.description);
-    
-    service.save(null).then(
-      function(service) {
+    console.log(service)
+    Parse.Cloud.run('change_description', 
+      { 
+        description: service.get("description"), 
+        serviceId: service.id 
+      }).then(function(service) {
         //self.state.messageObject = message ;
         // Execute any logic that should take place after the object is saved.
-        //alert('New object created with objectId: ' + message.id);
+        alert('Description changed: ' + service.id);
       },
       function(service, error) {
         // Execute any logic that should take place if the save fails.
         // error is a Parse.Error with an error code and message.
-        alert('Failed to create new object, with error code: ' + error.message);
-      }
-    );
+        alert('Failed to edit object, with error code: ' + error.message);
+      });
   },
   
   render: function() {
@@ -65,7 +67,7 @@ var ServiceInformationBlock = React.createClass({
 
         <div className="row">    
           <div className="col-lg-4 col-md-6 col-xs-12">
-            <Panel header={<span>{Parse.User.current().attributes.defaultService.attributes.name}</span>} >
+            <Panel header={<span>{this.props.service.service.attributes.name}</span>} >
               <div className="row">
                 <div className="col-sm-12">
                   <form role="form" onSubmit={this.handleSubmit}>
@@ -113,7 +115,7 @@ var Overview = React.createClass({
           </div>
         </div>
 
-        <ServiceInformationBlock />
+        <ServiceInformationBlock  {...this.props}  />
         
             <div className="row">    
           <Translate {...this.props} content="example.greeting" />

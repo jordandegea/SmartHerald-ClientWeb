@@ -56,7 +56,7 @@ var MessagesListBlock = React.createClass({
 
   observe: function() {
     return {
-      services: (new Parse.Query('Message')).equalTo("service", Parse.User.current().attributes.defaultService).descending("createdAt")
+      services: (new Parse.Query('Message')).equalTo("service", this.props.service.service).descending("createdAt")
     };
   },
       
@@ -184,7 +184,7 @@ var Messages = React.createClass({
         </div>
 
         <div className="row">    
-          <MessagesListBlock />
+          <MessagesListBlock {...this.props} />
         </div>
 
       </div>
