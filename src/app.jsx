@@ -79,7 +79,7 @@ let fetchData = function(routes, params) {
 
 Parse.initialize("com.sinenco.sharednews", "com.sinenco.sharednews");
 //Parse.serverURL = "http://localhost/parse";
-Parse.serverURL = "http://prod.shared-news.com/parse";
+Parse.serverURL = "http://dev.shared-news.com/parse";
 Parse.User.current();
 
 // Start the router

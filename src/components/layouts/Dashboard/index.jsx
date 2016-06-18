@@ -19,7 +19,7 @@ var ServicesListHomePage = React.createClass({
 
   observe: function() {
     return {
-      services: (new Parse.Query('ServicesOwners')).equalTo("owner", Parse.User.current()).include("service")
+      services: (new Parse.Query('ServicesOwners')).equalTo("client", Parse.User.current()).include("service")
     };
   },
     
@@ -46,9 +46,12 @@ var ServicesListHomePage = React.createClass({
         <NavDropdown title={this.props.service.service.attributes.name} >
         {
             this.data.services.map(function(c) {
-            var boundClick = this.changeServiceOfUser.bind(this, c.get("service").objectId);
-            return (<MenuItem key={c.get("service").objectId} onClick={boundClick}>
-                  <i className="fa fa-user fa-fw"></i>{c.get("service").name}
+          console.log(c);
+          var service = c.service;
+          console.log(service);
+            var boundClick = this.changeServiceOfUser.bind(this, c.service.id);
+            return (<MenuItem key={c.service.id} onClick={boundClick}>
+                  <i className="fa fa-user fa-fw"></i>{c.service.name}
               </MenuItem>);
           }, this)
         }

@@ -36,9 +36,6 @@ var ServiceInformationBlock = React.createClass({
     var self = this;
 
     var service = this.props.service.service ;
-    console.log("loading");
-    service.set("description", this.state.description);
-    console.log(service)
     Parse.Cloud.run('change_description', 
       { 
         description: service.get("description"), 
@@ -52,7 +49,8 @@ var ServiceInformationBlock = React.createClass({
         // Execute any logic that should take place if the save fails.
         // error is a Parse.Error with an error code and message.
         alert('Failed to edit object, with error code: ' + error.message);
-      });
+      }
+    );
   },
   
   render: function() {

@@ -77,6 +77,7 @@
     "react-intl": "^1.2.2",
     "react-modal": "^0.5.0",
     "react-quill": "^0.4.1",
+    "react-raw-html": "^0.4.0",
     "react-router": "^0.13.3",
     "react-translate-component": "^0.10.0",
     "reflux": "^0.2.12",

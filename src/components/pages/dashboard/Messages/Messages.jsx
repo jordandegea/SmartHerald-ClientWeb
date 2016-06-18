@@ -130,7 +130,6 @@ var MessagesListBlock = React.createClass({
                                   <Link to="dashboard.editmessage" params={{ "message": c.objectId }}  >
                                     <Button  bsStyle="warning col-xs-12 col-sm-6" bsSize="small">Edit</Button>
                                   </Link>
-                                  <Button bsStyle="primary col-xs-12 col-sm-6" bsSize="small">Send</Button>
                                 </td>
                               </tr>);
                           }, this)
@@ -167,7 +166,7 @@ var MessagesListBlock = React.createClass({
   },
   
   onEditButton : function(objectId){
-    console.log(objectId);
+    //console.log(objectId);
   }
 });
 

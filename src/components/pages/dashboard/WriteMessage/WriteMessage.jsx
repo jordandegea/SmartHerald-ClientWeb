@@ -6,6 +6,8 @@ import {NavDropdown, MenuItem, DropdownButton, Navbar, Nav, NavItem, Panel, Page
 import StatWidget from "../../../common/StatWidget.js";
 
 import ReactQuill from 'react-quill';
+import ReactDOM from 'react-dom';
+import RawHtml from "react-raw-html"
 
 import CounterPart from 'counterpart';
 import Translate from 'react-translate-component';
@@ -25,6 +27,33 @@ CounterPart.registerTranslations('de', {
     greeting: 'Hallo, %(name)s! Wie geht\'s dir heute so?'
   }
 });
+
+var Frame = React.createClass({
+
+  render: function() {
+    return <iframe />;
+  },
+  componentDidMount: function() {
+    this.renderFrameContents();
+  },
+  renderFrameContents: function() {
+    var doc = this.getDOMNode().contentDocument
+    if(doc.readyState === 'complete') {
+       ReactDOM.render(this.props.children, doc.body);
+    } else {
+       setTimeout(this.renderFrameContents, 0);
+    }
+  },
+  componentDidUpdate: function() {
+    this.renderFrameContents();
+  },
+  componentWillUnmount: function() {
+    React.unmountComponentAtNode(this.getDOMNode().contentDocument.body);
+  }
+});
+
+
+
 
 var WriteMessage = React.createClass({
 
@@ -48,8 +77,6 @@ var WriteMessage = React.createClass({
             
         },
         error: function(message, error) {
-            //console.log(error);
-        
             self.transitionTo('dashboard.messages');
         }
       });
@@ -74,39 +101,72 @@ var WriteMessage = React.createClass({
     
     e.stopPropagation();
     e.preventDefault();
+  },
+
+  handleSubmit: function(e){
+    
+    e.stopPropagation();
+    e.preventDefault();
     
     var self = this;
     var service = this.props.service.service; 
     if ( this.state.messageObject === null ){
-      var Message = Parse.Object.extend("Message");
-      var message = new Message();
-
-      message.set("summary", this.state.summary);
-      message.set("content", this.state.content);
-      message.set("service", service);
-      
+      /* Create a message
+       * @param request.user
+       * @param request.params.serviceId
+       * @param request.params.summary
+       * @param request.params.content */
+      Parse.Cloud.run('write_message', 
+      { 
+        summary: this.state.summary, 
+        content: this.state.content, 
+        serviceId: service.id 
+      }).then(
+        function(object) {
+          self.transitionTo('dashboard.messages', this.props);
+          /*
+          var datas = JSON.parse(object);
+          var Message = Parse.Object.extend("Message");
+          self.state.messageObject = new Message();
+          self.state.messageObject.id = datas.messageId;
+          self.state.messageObject.fetch();
+          */
+        },
+        function(service, error) {
+          alert('Failed to edit object, with error code: ' + error.message);
+        }
+      );
     }else{
+      /* Edit the message 
+       * @param request.user
+       * @param request.params.serviceId
+       * @param request.params.messageId
+       * @param request.params.summary
+       * @param request.params.content */
       var message = this.state.messageObject ;
 
-      message.set("summary", this.state.summary);
-      message.set("content", this.state.content);
-      message.set("service", service);
+      Parse.Cloud.run('edit_message', 
+      { 
+        summary: this.state.summary, 
+        content: this.state.content, 
+        serviceId: service.id,
+        messageId: message.id
+      }).then(
+        function(object) {
+          /*
+          var Message = Parse.Object.extend("Message");
+          self.state.messageObject = new Message();
+          self.state.messageObject.id = messageId;
+          self.state.messageObject.fetch();
+          */
+          self.transitionTo('dashboard.messages', this.props);
+        },
+        function(service, error) {
+          alert('Failed to edit object, with error code: ' + error.message);
+        }
+      );
       
     }
-    
-    message.save(null, {
-      success: function(message) {
-        self.state.messageObject = message ;
-        // Execute any logic that should take place after the object is saved.
-        //alert('New object created with objectId: ' + message.id);
-        //console.log(message);
-      },
-      error: function(message, error) {
-        // Execute any logic that should take place if the save fails.
-        // error is a Parse.Error with an error code and message.
-        alert('Failed to create new object, with error code: ' + error.message);
-      }
-    });
   },
   
   render: function() {
@@ -121,7 +181,7 @@ var WriteMessage = React.createClass({
 
         <div className="row">    
           <div className="col-lg-6">
-            <Panel header={<span>Basic Form Elements</span>} >
+            <Panel header={<span>Edition</span>} >
               <div className="row">
                 <div className="col-sm-12">
                   <form role="form" onSubmit={this.handleSubmit}>
@@ -144,6 +204,25 @@ var WriteMessage = React.createClass({
                     </div>
                     
                     <Button bsStyle="primary" type="submit" >Save Message</Button>
+                  </form>
+                </div>
+              </div>
+            </Panel>
+          </div>
+
+          <div className="col-lg-6">
+            <Panel header={<span>Preview</span>} >
+              <div className="row">
+                <div className="col-sm-12">
+                  <form role="form" onSubmit={this.handleSend}>
+                    <div className="form-group">
+                      <Frame >
+                      <div>
+                         <RawHtml.div>{this.state.content}</RawHtml.div>
+                      </div>
+                      </Frame>
+                    </div>
+                    <Button bsStyle="primary pull-right" type="submit" >Send Message</Button>
                   </form>
                 </div>
               </div>

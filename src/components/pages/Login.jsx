@@ -74,8 +74,7 @@ var LoginPage = React.createClass({
     
     var self = this;
     Parse.User.logIn(this.state.loginID, this.state.password, {
-        success: function(user) {
-        console.log(user);
+      success: function(user) {
         /* Check if services exists */
         var ServiceParseObject = Parse.Object.extend("ServicesOwners");
         var query = new Parse.Query(ServiceParseObject);
@@ -83,11 +82,8 @@ var LoginPage = React.createClass({
         query.find({
           success: function(objects) {
             if ( objects.length > 0 ){
-                console.log(objects);
-                console.log(objects[0]);
                 self.props.service.service = objects[0].get("service");
-                console.log(self);
-                self.transitionTo('dashboard', this.props);
+                self.transitionTo('dashboard.writemessage', this.props);
             }else{
               console.log("No service owned");
             }
