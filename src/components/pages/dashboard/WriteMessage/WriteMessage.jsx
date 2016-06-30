@@ -5,6 +5,7 @@ import {NavDropdown, MenuItem, DropdownButton, Navbar, Nav, NavItem, Panel, Page
 
 import StatWidget from "../../../common/StatWidget.js";
 
+import Router from 'react-router';
 import ReactQuill from 'react-quill';
 import ReactDOM from 'react-dom';
 import RawHtml from "react-raw-html"
@@ -57,6 +58,7 @@ var Frame = React.createClass({
 
 var WriteMessage = React.createClass({
 
+
   getInitialState: function() {
   
     var self = this;
@@ -89,6 +91,8 @@ var WriteMessage = React.createClass({
     };
   },
   
+  mixins: [Router.Navigation],
+
   onContentChange: function(value) {
     this.setState({ content:value });
   },
@@ -97,10 +101,39 @@ var WriteMessage = React.createClass({
     this.setState({ summary:e.target.value });
   },
   
-  handleSubmit: function(e){
+  handleSend: function(e){
     
     e.stopPropagation();
     e.preventDefault();
+
+    if ( this.state.messageObject == null){
+      alert("You have to save your message first");
+      return;
+    }
+    var self = this;
+    var message = this.state.messageObject;
+    var service = this.props.service.service;
+    if ( confirm("Are you sure? \nAfter sending the message, you can't edit it. ")){
+      Parse.Cloud.run('send', 
+      {
+        messageId: message.id, 
+        serviceId: service.id 
+      }).then(
+        function(object) {
+          self.transitionTo('dashboard.messages', this.props);
+          /*
+          var datas = JSON.parse(object);
+          var Message = Parse.Object.extend("Message");
+          self.state.messageObject = new Message();
+          self.state.messageObject.id = datas.messageId;
+          self.state.messageObject.fetch();
+          */
+        },
+        function(service, error) {
+          alert('Failed to edit object, with error code: ' + error.message);
+        }
+      );
+    }
   },
 
   handleSubmit: function(e){
@@ -121,9 +154,10 @@ var WriteMessage = React.createClass({
         summary: this.state.summary, 
         content: this.state.content, 
         serviceId: service.id 
-      }).then(
-        function(object) {
-          self.transitionTo('dashboard.messages', this.props);
+      },{
+        success: function(object) {
+          console.log("message saved");
+          self.transitionTo('dashboard.overview', this.props);
           /*
           var datas = JSON.parse(object);
           var Message = Parse.Object.extend("Message");
@@ -132,9 +166,10 @@ var WriteMessage = React.createClass({
           self.state.messageObject.fetch();
           */
         },
-        function(service, error) {
+        error: function(service, error) {
           alert('Failed to edit object, with error code: ' + error.message);
         }
+      } 
       );
     }else{
       /* Edit the message 
@@ -216,7 +251,7 @@ var WriteMessage = React.createClass({
                 <div className="col-sm-12">
                   <form role="form" onSubmit={this.handleSend}>
                     <div className="form-group">
-                      <Frame >
+                      <Frame>
                       <div>
                          <RawHtml.div>{this.state.content}</RawHtml.div>
                       </div>

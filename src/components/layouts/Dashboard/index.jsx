@@ -85,8 +85,7 @@ var HomePage = React.createClass({
       this.transitionTo('login', {});
     }
     
-        console.log(Parse.User.current().attributes)
-          return {
+    return {
       uiElementsCollapsed: true,
       chartsElementsCollapsed: true,
       multiLevelDropdownCollapsed: true,
@@ -132,7 +131,7 @@ var HomePage = React.createClass({
                 
                 <ServicesListHomePage {...this.props} />
                 
-                <NavDropdown title={Parse.User.current().attributes.username} >
+                <NavDropdown id="user_dropdown" title={Parse.User.current().attributes.username} >
                   <MenuItem eventKey="1">
                     <i className="fa fa-user fa-fw"></i> User Profile
                   </MenuItem> 
@@ -154,18 +153,6 @@ var HomePage = React.createClass({
                 
                 <ul className="nav in" id="side-menu">
 
-                  <li className="sidebar-search">
-                    <div className="input-group custom-search-form">
-                      <input type="text" className="form-control" placeholder="Search..." />
-                      <span className="input-group-btn">
-                        <button className="btn btn-default" type="button">
-                          <i className="fa fa-search"></i>
-                        </button>
-                      </span>
-                    </div>
-                  </li>
-              
-                  
                   <li>
                     <Link to="dashboard.home"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Dashboard</Link>
                   </li>

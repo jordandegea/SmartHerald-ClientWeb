@@ -83,7 +83,7 @@ var LoginPage = React.createClass({
           success: function(objects) {
             if ( objects.length > 0 ){
                 self.props.service.service = objects[0].get("service");
-                self.transitionTo('dashboard.writemessage', this.props);
+                self.transitionTo('dashboard.overview', this.props);
             }else{
               console.log("No service owned");
             }
