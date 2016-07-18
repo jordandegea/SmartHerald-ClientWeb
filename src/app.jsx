@@ -36,6 +36,6 @@ Parse.serverURL = "http://dev.shared-news.com/parse";
 Parse.User.current();
 
 // Start the router
-Router.run(routes, Router.HistoryLocation, function(Handler) {
+Router.run(routes, Router.HashLocation, function(Handler) {
   ReactDOM.render(<Handler />, document.getElementById(DOM_APP_EL_ID));
 });

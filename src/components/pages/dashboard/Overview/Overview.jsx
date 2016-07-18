@@ -18,7 +18,6 @@ import Translate from 'react-translate-component';
 var ServiceInformationBlock = React.createClass({
 
   getInitialState: function() {
-  
     return {
       description:this.props.service.service.attributes.description
     };
@@ -55,16 +54,16 @@ var ServiceInformationBlock = React.createClass({
   
   render: function() {
     return (
-      <div>
+      <div className="col-xs-12 col-sm-12 col-md-6 col-xs-6">
 
         <div className="row">
-          <div className="col-lg-12">
+          <div className="col-xs-12">
             <PageHeader>Your information</PageHeader>
           </div>
         </div>
 
         <div className="row">    
-          <div className="col-lg-4 col-md-6 col-xs-12">
+          <div className="col-xs-12">
             <Panel header={<span>{this.props.service.service.attributes.name}</span>} >
               <div className="row">
                 <div className="col-sm-12">
@@ -82,7 +81,7 @@ var ServiceInformationBlock = React.createClass({
                         <div key="editor"
                             ref="editor"
                             className="quill-contents"
-                            style={ {height:200} } />
+                            style={ {height:50} } />
                      </ReactQuill>
                     </div>
                     
@@ -100,6 +99,57 @@ var ServiceInformationBlock = React.createClass({
 
 });
 
+var ServiceStatsBlock = React.createClass({
+  
+   getInitialState() {
+    var self = this ;
+    var service = this.props.service.service ;
+    console.log(service);
+    var serviceConfiguration = service.get('configuration');
+    serviceConfiguration.fetch().then(
+        function(object) {
+          self.setState({
+            messagesUsers: object.get("messagesUsers"),
+            users: object.get("subscriptions")
+          });
+        },
+        function(error){
+          alert("Impossible to retrieve information, please contact us");
+        }
+    );
+    return {
+      messagesUsers : "...",
+      users : "..."
+    };
+  },
+  
+  render: function() {
+    return (
+        <div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div className="row">
+            <div className="col-lg-12">
+              <PageHeader>Stats</PageHeader>
+            </div>
+          </div>
+
+          <div className="col-xs-12 col-lg-6">
+            <StatWidget style="primary"
+                    icon="fa fa-paper-plane fa-5x"
+                    count={this.state.messagesUsers}
+                    headerText="Messages Users remaining" 
+                    footerText="Upgrade package"
+                    linkTo="http://shop.sinenco.com/" />
+          </div>
+          <div className="col-xs-12 col-lg-6">
+            <StatWidget style = "panel-green"
+                    icon = "fa fa-users fa-5x"
+                    count = {this.state.users}
+                    headerText="Users" />
+          </div>
+        </div>
+      );
+    }
+});
 
 var Overview = React.createClass({
 
@@ -107,17 +157,10 @@ var Overview = React.createClass({
     return (
       <div>
 
-        <div className="row">
-          <div className="col-lg-12">
-            <PageHeader>Overview</PageHeader>
-          </div>
-        </div>
-
+        <ServiceStatsBlock  {...this.props}  />
+        
         <ServiceInformationBlock  {...this.props}  />
         
-            <div className="row">    
-          <Translate {...this.props} content="example.greeting" />
-        </div>
 
       </div>
     );

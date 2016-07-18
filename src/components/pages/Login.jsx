@@ -1,7 +1,7 @@
 /* global Parse */
 
 import React from 'react';
-import Router from 'react-router';
+import Router, { Link, RouteHandler } from 'react-router';
 import {Panel, Input, Button} from 'react-bootstrap';
 import Parse from "parse"
 
@@ -31,7 +31,13 @@ var LoginPage = React.createClass({
           <form role="form" onSubmit={this.handleLogin}>
             <fieldset>
               <div className="form-group">
-                <Input onChange={this.setLoginID} className="form-control" placeholder="Username" ref="loginID" type="text" autofocus="" name="name" />
+                <Input 
+                    onChange={this.setLoginID} className="form-control" 
+                    autoComplete={"off"} autoCorrect={"off"} 
+                    autoCapitalize={"off"} spellCheck={false} 
+                    placeholder="Username" ref="loginID" 
+                    type="text" autofocus="" 
+                    name="name" />
               </div>
 
               <div className="form-group">
@@ -39,6 +45,8 @@ var LoginPage = React.createClass({
               </div>
               <Input type="checkbox" label="Remember Me" />
               <Button type="submit" bsSize="large" bsStyle="success" block>Login</Button>
+              <br />
+              <Link to="register"><Button bsSize="large" bsStyle="primary" block>Create your access</Button></Link>
               
             </fieldset>
           </form>

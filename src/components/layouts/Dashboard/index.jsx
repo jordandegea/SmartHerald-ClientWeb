@@ -26,12 +26,14 @@ var ServicesListHomePage = React.createClass({
    /* When the client will click on a service. 
     * We change the interface by taking the new service and rerender */ 
   changeServiceOfUser: function(serviceId){
+
     var self = this ; 
     var ServiceParseObject = Parse.Object.extend("Service");
     var query = new Parse.Query(ServiceParseObject);
     query.get(serviceId, {
       success: function(service) {
-        this.props.service.service = service; 
+        self.props.service.service = service; 
+        alert("Change the page to manage the selected company");
       },
         error: function(object, error) {
             // It can be good to add something to display if failed
@@ -45,14 +47,19 @@ var ServicesListHomePage = React.createClass({
     return (
         <NavDropdown title={this.props.service.service.attributes.name} >
         {
-            this.data.services.map(function(c) {
-          console.log(c);
-          var service = c.service;
-          console.log(service);
-            var boundClick = this.changeServiceOfUser.bind(this, c.service.id);
-            return (<MenuItem key={c.service.id} onClick={boundClick}>
-                  <i className="fa fa-user fa-fw"></i>{c.service.name}
-              </MenuItem>);
+          this.data.services.map(function(c) {
+            console.log(c);
+            var service = c.service;
+            console.log(service);
+            if ( typeof(service) != "undefined"){
+            console.log(service);
+              var boundClick = this.changeServiceOfUser.bind(this, service.objectId);
+              return (<MenuItem key={service.objectId} onClick={boundClick}>
+                    <i className="fa fa-user fa-fw"></i>{service.name}
+                </MenuItem>);
+            }else{
+              return ;
+            }
           }, this)
         }
         </NavDropdown>
@@ -81,7 +88,7 @@ var HomePage = React.createClass({
 
   getInitialState: function(){
     
-    if ( Parse.User.current() == null ){
+    if ( Parse.User.current() == null || this.props.service.service == undefined ){
       this.transitionTo('login', {});
     }
     
@@ -129,7 +136,7 @@ var HomePage = React.createClass({
               <ul className="nav navbar-top-links navbar-right">
               <Nav style={ {margin: 0} }>
                 
-                <ServicesListHomePage {...this.props} />
+                <ServicesListHomePage {...this.props}/>
                 
                 <NavDropdown id="user_dropdown" title={Parse.User.current().attributes.username} >
                   <MenuItem eventKey="1">

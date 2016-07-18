@@ -12,6 +12,8 @@ import DashboardMessagesPage from "../components/pages/dashboard/Messages";
 import DashboardReportsPage from "../components/pages/dashboard/Reports";
 
 import LoginPage from "../components/pages/Login";
+import RegisterPage from "../components/pages/Register";
+import RegistrationCompletedPage from "../components/pages/RegistrationCompleted";
 import LogoutPage from "../components/pages/Logout";
 
 var Routes = React.createClass({
@@ -31,6 +33,8 @@ var Routes = React.createClass({
               <DefaultRoute name="dashboard.default" handler={DashboardHomePage} />
             </Route>
             <Route name="login" path="/login" handler={LoginPage} />
+            <Route name="register" path="/register" handler={RegisterPage} />
+            <Route name="registration_complete" path="/register/complete" handler={ RegistrationCompletedPage} />
             <Route name="logout" path="/logout" handler={LogoutPage} />
             <DefaultRoute name="default" handler={DashboardLayout} />
             <Redirect from="/" to="login" />
