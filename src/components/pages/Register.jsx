@@ -3,7 +3,8 @@
 import React from 'react';
 import Router from 'react-router';
 import {Panel, Input, Button} from 'react-bootstrap';
-import Parse from "parse"
+import Parse from "parse";
+import cookie from 'react-cookie';
 
 
 var RegisterPage = React.createClass({
@@ -20,7 +21,7 @@ var RegisterPage = React.createClass({
       error:'',
       checked: false,
       checking: true,
-      register:false
+      register: false
     };
   },
 
@@ -215,10 +216,10 @@ var RegisterPage = React.createClass({
                   sandbox:false
                 });
             }else{
-            self.setState({
-                error:'Check Ok, you can continue. ',
-                checked: true
-            });
+              self.setState({
+                  error:'Check Ok, you can continue. ',
+                  checked: true
+              });
             }
           }else{
             self.setState({
@@ -233,6 +234,7 @@ var RegisterPage = React.createClass({
           self.setState({
               error:'If nothing happens, use this url: '+object["url"]+''
           });
+          cookie.save('paiement_token', object["token"], { path: '/' });
           window.location.href = object["url"];
         },
         function(error){

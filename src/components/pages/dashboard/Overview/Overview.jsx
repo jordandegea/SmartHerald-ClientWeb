@@ -8,6 +8,7 @@ import StatWidget from "../../../common/StatWidget.js";
 import ReactQuill from 'react-quill';
 
 import Parse from "parse";
+import Router, { Link, RouteHandler } from "react-router";
 import ParseReact from "parse-react";
 
 
@@ -37,12 +38,13 @@ var ServiceInformationBlock = React.createClass({
     var service = this.props.service.service ;
     Parse.Cloud.run('change_description', 
       { 
-        description: service.get("description"), 
+        description: this.state.description, 
         serviceId: service.id 
       }).then(function(service) {
+        console.log(service);
         //self.state.messageObject = message ;
         // Execute any logic that should take place after the object is saved.
-        alert('Description changed: ' + service.id);
+        //alert('Description changed: ' + service.id);
       },
       function(service, error) {
         // Execute any logic that should take place if the save fails.
@@ -64,25 +66,14 @@ var ServiceInformationBlock = React.createClass({
 
         <div className="row">    
           <div className="col-xs-12">
-            <Panel header={<span>{this.props.service.service.attributes.name}</span>} >
+            <Panel>
               <div className="row">
                 <div className="col-sm-12">
+                  <h3>{this.props.service.service.attributes.name}</h3>
                   <form role="form" onSubmit={this.handleSubmit}>
                     
                     <div className="form-group">
-                      <label className="control-label">Description</label>
-                    
-                      <ReactQuill theme="snow"
-                          value={this.state.description}
-                          onChange={this.onDescriptionChange} >
-                        <ReactQuill.Toolbar key="toolbar"
-                            ref="toolbar"
-                            items={ReactQuill.Toolbar.defaultItems} />
-                        <div key="editor"
-                            ref="editor"
-                            className="quill-contents"
-                            style={ {height:50} } />
-                     </ReactQuill>
+                      <textarea  className="form-control" onChange={this.onDescriptionChange} placeholder="Description">{this.state.description}</textarea>
                     </div>
                     
                     <Button bsStyle="primary" type="submit" >Save Information</Button>
@@ -134,19 +125,77 @@ var ServiceStatsBlock = React.createClass({
 
           <div className="col-xs-12 col-lg-6">
             <StatWidget style="primary"
-                    icon="fa fa-paper-plane fa-5x"
+                    icon="fa fa-paper-plane fa-4x"
                     count={this.state.messagesUsers}
                     headerText="Messages Users remaining" 
                     footerText="Upgrade package"
-                    linkTo="http://shop.sinenco.com/" />
+                    linkTo="dashboard.packages" />
           </div>
           <div className="col-xs-12 col-lg-6">
             <StatWidget style = "panel-green"
-                    icon = "fa fa-users fa-5x"
+                    icon = "fa fa-users fa-3x"
                     count = {this.state.users}
                     headerText="Users" />
           </div>
         </div>
+      );
+    }
+});
+
+
+
+var ServiceOptionsBlock = React.createClass({
+  
+   getInitialState() {
+    var self = this ;
+    var service = this.props.service.service ;
+
+    var serviceConfiguration = service.get('configuration');
+    serviceConfiguration.fetch().then(
+        function(object) {
+          self.setState({
+            loading:false,
+            iOSStandalone: serviceConfiguration.get("iOSStandalone"),
+            iOSStandaloneExpire: serviceConfiguration.get("iOSStandaloneExpire")
+          });
+        },
+        function(error){
+          alert("Impossible to retrieve information, please contact us");
+        }
+    );
+    return {
+      loading:true,
+      iOSStandalone:null,
+      iOSStandaloneExpire:null
+    };
+  },
+  
+  render: function() {
+    return (
+      <div>
+        <div className={this.state.loading?"hidden":"col-xs-12"}>
+          <div className="row">
+            <div className="col-lg-12">
+              <PageHeader>Options</PageHeader>
+            </div>
+          </div>
+
+          <Panel header={<h3>Standalone iOS App<div className="pull-right">
+              <Link to="dashboard.packages"><i className="fa fa-plus fa-fw"></i></Link>
+            </div></h3>
+            } bsStyle="success">
+            { this.state.iOSStandalone ? <span>You are using the iOS Standalone App</span>: <span>Standalone app allows you to have your own app. Contact us for more information. Click on the button to purchase. </span>}
+          </Panel>
+        </div>
+
+        <div className={ (!this.state.loading)?"hidden":"col-xs-12"}>
+          <div className="row">
+            <div className="col-lg-12">
+              <PageHeader>Loading options...</PageHeader>
+            </div>
+          </div>
+        </div>
+      </div>
       );
     }
 });
@@ -157,10 +206,11 @@ var Overview = React.createClass({
     return (
       <div>
 
-        <ServiceStatsBlock  {...this.props}  />
-        
         <ServiceInformationBlock  {...this.props}  />
-        
+
+        <ServiceStatsBlock  {...this.props}  />
+                
+        <ServiceOptionsBlock  {...this.props}  />
 
       </div>
     );

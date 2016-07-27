@@ -73,6 +73,7 @@
     "postcss-nested": "^1.0.0",
     "react": "^0.14.7",
     "react-bootstrap": "0.28.3",
+    "react-cookie": "^0.4.7",
     "react-interpolate-component": "^0.8.0",
     "react-intl": "^1.2.2",
     "react-modal": "^0.5.0",

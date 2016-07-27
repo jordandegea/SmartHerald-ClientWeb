@@ -3,7 +3,7 @@
 import React from 'react';
 import Router, { Link, RouteHandler } from 'react-router';
 import {Panel, Input, Button} from 'react-bootstrap';
-import Parse from "parse"
+import Parse from "parse";
 
 
 var LoginPage = React.createClass({

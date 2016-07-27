@@ -48,11 +48,8 @@ var ServicesListHomePage = React.createClass({
         <NavDropdown title={this.props.service.service.attributes.name} >
         {
           this.data.services.map(function(c) {
-            console.log(c);
             var service = c.service;
-            console.log(service);
             if ( typeof(service) != "undefined"){
-            console.log(service);
               var boundClick = this.changeServiceOfUser.bind(this, service.objectId);
               return (<MenuItem key={service.objectId} onClick={boundClick}>
                     <i className="fa fa-user fa-fw"></i>{service.name}
@@ -161,9 +158,6 @@ var HomePage = React.createClass({
                 <ul className="nav in" id="side-menu">
 
                   <li>
-                    <Link to="dashboard.home"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Dashboard</Link>
-                  </li>
-                  <li>
                     <Link to="dashboard.overview"><i className="fa fa-dashboard fa-fw"></i> &nbsp;Overview</Link>
                   </li>
                   <li>
@@ -171,6 +165,9 @@ var HomePage = React.createClass({
                   </li>
                   <li>
                     <Link to="dashboard.writemessage"><i className="fa fa-pencil-square fa-fw"></i> &nbsp;Write Message</Link>
+                  </li>
+                  <li>
+                    <Link to="dashboard.packages"><i className="fa fa-plus-square fa-fw"></i> &nbsp;Packages</Link>
                   </li>
           
                 </ul>
