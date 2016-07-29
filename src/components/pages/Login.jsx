@@ -22,7 +22,7 @@ var LoginPage = React.createClass({
     return <div className="col-md-4 col-md-offset-4">
 
         <div className="text-center">
-          <h1 className="login-brand-text">SharedNews: Client Dashboard</h1>
+          <h1 className="login-brand-text">Smart Herald: Client Dashboard</h1>
           <h3 className="text-muted">Created by <a href="http://sinenco.com">sinenco.com</a></h3>
         </div>
 

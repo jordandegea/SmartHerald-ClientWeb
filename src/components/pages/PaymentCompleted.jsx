@@ -57,9 +57,9 @@ var PaymentCompletedPage = React.createClass({
     return <div className="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 
         <div className="text-center">
-        { (this.state.progress) ?<h1 className="login-brand-text">SharedNews: Payment in progress</h1>:null}
-        { (!this.state.progress && this.state.success) ? <h1 className="login-brand-text">SharedNews: Payment completed</h1>:null}
-        { (!this.state.progress && !this.state.success) ?<h1 className="login-brand-text">SharedNews: failure</h1>:null}
+        { (this.state.progress) ?<h1 className="login-brand-text">Smart Herald: Payment in progress</h1>:null}
+        { (!this.state.progress && this.state.success) ? <h1 className="login-brand-text">Smart Herald: Payment completed</h1>:null}
+        { (!this.state.progress && !this.state.success) ?<h1 className="login-brand-text">Smart Herald: failure</h1>:null}
         </div>
 
 

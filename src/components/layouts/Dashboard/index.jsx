@@ -116,8 +116,8 @@ var HomePage = React.createClass({
           <Navbar fluid={true}  style={ {margin: 0} }>
             <Navbar.Header>
               <Navbar.Brand>
-                <span><img src={require('../../../common/img/logo.png')} alt="Start React" title="Start React" />
-                <span>&nbsp;Shared News - </span>
+                <span><img src={require('../../../common/img/logo.png')} alt="Smart Herald" title="Smart Herald" />
+                <span>&nbsp;Smart Herald - </span>
                 <Link to="dashboard.home">Dashboard</Link>
                 <button type="button" className="navbar-toggle" onClick={this.toggleMenu} style={{position: 'absolute', right: 0, top: 0}}>
                   <span className="sr-only">Toggle navigation</span>

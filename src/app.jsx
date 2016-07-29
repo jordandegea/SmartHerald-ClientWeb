@@ -30,9 +30,9 @@ let routes;
 routes = Routes.getRoutes();
 
 
-Parse.initialize("com.sinenco.sharednews", "com.sinenco.sharednews");
+Parse.initialize("com.sinenco.smartherald", "com.sinenco.smartherald");
 //Parse.serverURL = "http://localhost/parse";
-Parse.serverURL = "http://dev.shared-news.com/parse";
+Parse.serverURL = "http://smartherald.com/parse";
 Parse.User.current();
 
 // Start the router

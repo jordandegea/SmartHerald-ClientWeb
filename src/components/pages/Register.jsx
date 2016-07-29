@@ -45,7 +45,7 @@ var RegisterPage = React.createClass({
     return <div className="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 
         <div className="text-center">
-          <h1 className="login-brand-text">SharedNews: Create your access</h1>
+          <h1 className="login-brand-text">Smart Herald: Create your access</h1>
           <h3 className="text-muted">Created by <a href="http://sinenco.com">sinenco.com</a></h3>
         </div>
 
