@@ -13,7 +13,7 @@ import DashboardPackagesPage from "../components/pages/dashboard/Packages";
 
 import LoginPage from "../components/pages/Login";
 import RegisterPage from "../components/pages/Register";
-import PaymentCompletedPage from "../components/pages/RegistrationCompleted";
+import PaymentCompletedPage from "../components/pages/PaymentCompleted";
 import LogoutPage from "../components/pages/Logout";
 
 var Routes = React.createClass({

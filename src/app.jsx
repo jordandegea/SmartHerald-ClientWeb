@@ -31,7 +31,7 @@ routes = Routes.getRoutes();
 
 
 Parse.initialize("com.sinenco.smartherald", "com.sinenco.smartherald");
-//Parse.serverURL = "http://localhost/parse";
+//Parse.serverURL = "http://localhost:1337/parse";
 Parse.serverURL = "http://smartherald.com/parse";
 Parse.User.current();
 

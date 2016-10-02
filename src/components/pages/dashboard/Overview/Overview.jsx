@@ -127,7 +127,7 @@ var ServiceStatsBlock = React.createClass({
             <StatWidget style="primary"
                     icon="fa fa-paper-plane fa-4x"
                     count={this.state.messagesUsers}
-                    headerText="Messages Users remaining" 
+                    headerText="Messages remaining" 
                     footerText="Upgrade package"
                     linkTo="dashboard.packages" />
           </div>
@@ -137,6 +137,7 @@ var ServiceStatsBlock = React.createClass({
                     count = {this.state.users}
                     headerText="Users" />
           </div>
+
         </div>
       );
     }
@@ -211,6 +212,23 @@ var Overview = React.createClass({
         <ServiceStatsBlock  {...this.props}  />
                 
         <ServiceOptionsBlock  {...this.props}  />
+
+
+        <div className="col-xs-12 col-md-6">
+          <Panel header={<h3>QRCode to download the Shared Applications</h3>
+            } bsStyle="success">
+            <a href='http://www.unitag.io/qrcode'>
+              <img className="img-responsive" src='http://www.unitag.io/qreator/generate?crs=xnjFkEn%252FP85fCPDXJ%252FXXKnPnKU%252FtWVh9E7ei8Ex%252BR4XsTvus59MiRl4OtJ5Y%252F3aRXopA7Qn4wJ6m3qLfsP4IWv39ocSd3mMczmj1AuyiW6K%252F58n8n8s5NK61vAUi6GUR9QhYs1xUoNWG3PC4owAgU1Q%252FHThW3FIfdeEUqZ%252BlJgc%253D&crd=fhOysE0g3Bah%252BuqXA7NPQ5vKNaWI8m207oHOsyXhdOrqdL%252B70qcSmXjiM9K5oJyJ0mEQSZ5jgNWV4hFyl7Nr98qv66gdiRt1edfB099JF74%253D' alt='QR Code'/>
+            </a>
+            </Panel>
+        </div>
+
+        <div className="col-xs-12 col-md-6">
+          <Panel header={<h3>QRCode to download the Standalone Applications</h3>
+            } bsStyle="success">
+            Not available now
+            </Panel>
+        </div>
 
       </div>
     );

@@ -20,7 +20,7 @@ var PaymentCompletedPage = React.createClass({
   },
 
   componentDidMount(){
-    if ( typeof(this.state.token) != "undefined" ){
+    if ( typeof(this.state.token) == "undefined" ){
       this.setState({
         progress:false,
         success:false,
@@ -32,7 +32,7 @@ var PaymentCompletedPage = React.createClass({
       Parse.Cloud.run(
         'paiement_check', 
         { 
-          paiement_token: this.state.token,
+          paiement_token: self.state.token,
           sandbox:false
         }).then(
           function(object){
@@ -40,12 +40,12 @@ var PaymentCompletedPage = React.createClass({
               progress:false,
               success:true
             });
-            console.log(object);
-          },
+            console.log(object);          },
           function(error){
             self.setState({
               progress:false,
-              success:false
+              success:false,
+              message:"Payment failed. Contact us. "
             });
             console.log(error);
           }
@@ -54,6 +54,7 @@ var PaymentCompletedPage = React.createClass({
   },
 
   render: function(){
+
     return <div className="col-xs-12 col-sm-12 col-md-6 col-md-offset-3">
 
         <div className="text-center">
@@ -70,7 +71,7 @@ var PaymentCompletedPage = React.createClass({
           Thank you for your purchase.  You can log in. 
         </Panel>
         <Panel className={(!this.state.progress && !this.state.success) ? 'login-panel' :'hidden' } >
-          Payment failed. An email has been sent to the administrator. <br /><br />
+          {this.state.message} <br /><br />
           <Link to="login"><Button bsSize="large" bsStyle="primary" block>Retry</Button></Link>
         </Panel>
           <br /><br />
