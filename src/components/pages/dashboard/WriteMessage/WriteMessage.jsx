@@ -4,7 +4,6 @@ import React, { PropTypes, Component } from 'react';
 import {NavDropdown, MenuItem, DropdownButton, Navbar, Nav, NavItem, Panel, PageHeader, ListGroup, ListGroupItem, Button, Input, Col, Row, FormGroup, FormControl, ControlLabel, Checkbox} from "react-bootstrap";
 
 import StatWidget from "../../../common/StatWidget.js";
-import QuillCustomToolbars from "../../../common/QuillCustomToolbars.js";
 
 import Router from 'react-router';
 import ReactDOM from 'react-dom';
@@ -39,7 +38,8 @@ var Frame = React.createClass({
               borderStyle: "solid",
               borderWidth: "1px",
               borderColor:"#AAAAAA",
-              borderRadius:"6px"
+              borderRadius:"6px",
+              padding:"4px"
           }}
               ref='iframe'>
           </iframe>
@@ -72,11 +72,11 @@ var WriteMessage = React.createClass({
   getInitialState: function() {
   
     var self = this;
-  
-    if (this.props.params.hasOwnProperty("messageCreator")){
+
+    if (this.props.query.hasOwnProperty("message")){
       var MessageCreator = Parse.Object.extend("MessageCreator");
       var query = new Parse.Query(MessageCreator);
-      query.get(this.props.params.messageCreator, {
+      query.get(this.props.query.message, {
         success: function(message) {
           
             self.setState( { 
@@ -88,10 +88,12 @@ var WriteMessage = React.createClass({
               js_jquery:message.attributes.js_jquery,
               js_jquery_v:message.attributes.js_jquery_v,
               js_bootstrap:message.attributes.js_bootstrap,
+              started:true
             });
             
-            self.forceUpdate();
+            tinyMCE.get('tinyeditor').setContent(message.attributes.content);
             
+            self.forceUpdate();
         },
         error: function(message, error) {
             self.transitionTo('dashboard.messages');
@@ -383,7 +385,7 @@ var WriteMessage = React.createClass({
               </div>
             </div>
 
-            <div className="col-xs-12 col-sm-6 col-md-6 col-col-sm-push-2 col-lg-4">
+            <div className="col-xs-12 col-sm-6 col-md-6 col-sm-push-2 col-lg-4">
               <div className="col-sm-6">
                 <Button bsStyle="btn btn-block btn-success" onClick={this.handleSave}>Save Message</Button>
               </div>
@@ -404,6 +406,8 @@ var WriteMessage = React.createClass({
                     <div className="form-group">
                       <label className="control-label">Content</label>
                       <TinyMCE
+                        id={"tinyeditor"}
+                        ref="tinyeditor"
                         content={this.state.content}
                         config={{
                           selector: 'textarea',
