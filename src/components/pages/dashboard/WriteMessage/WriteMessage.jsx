@@ -63,11 +63,34 @@ var Frame = React.createClass({
   }
 });
 
+var startContent = '<div class="jumbotron text-center">'+
+      '<h1>Sample message</h1>' +
+      '<p>Clic on "Reload preview"</p>' +
+      '<p><img src="http://a1.mzstatic.com/us/r30/Purple62/v4/8c/75/d7/8c75d713-e520-851b-4e94-bebd41cb03b9/icon175x175.jpeg" width="64" height="64" /></p>' +
+      '</div>' +
+      '<div class="container">' +
+      '<div class="row">' +
+      '<div class="col-sm-4">' +
+      '<h3>You can have title</h3>' +
+      '<p>And <strong>different</strong> <em>style</em></p>' +
+      '</div>' +
+      '<div class="col-sm-4">' +
+      '<h3>Top menu</h3>' +
+      '<p>Don\'t hesitate to check menus, especially view</p>' +
+      '<p>You can access source code with "Tools"</p>' +
+      '</div>' +
+      '<div class="col-sm-4">' +
+      '<h3>HTML</h3>' +
+      '<p>This message is formatted with HTML, CSS and javascript</p>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
 
 
 
 var WriteMessage = React.createClass({
 
+  
 
   getInitialState: function() {
   
@@ -79,21 +102,28 @@ var WriteMessage = React.createClass({
       query.get(this.props.query.message, {
         success: function(message) {
           
-            self.setState( { 
-              messageObject:message,
-              summary:message.attributes.summary,
-              content:message.attributes.content,
-              base_css:message.attributes.base_css,
-              custom_css:message.attributes.custom_css,
-              js_jquery:message.attributes.js_jquery,
-              js_jquery_v:message.attributes.js_jquery_v,
-              js_bootstrap:message.attributes.js_bootstrap,
-              started:true
-            });
-            
-            tinyMCE.get('tinyeditor').setContent(message.attributes.content);
-            
-            self.forceUpdate();
+          var content = message.attributes.content;
+          var base_css = message.attributes
+
+          if ( content == ""){
+            content = startContent;
+            base_css = "bootstrap";
+          }
+          self.setState( { 
+            messageObject:message,
+            summary:message.attributes.summary,
+            content:content,
+            base_css:base_css,
+            custom_css:message.attributes.custom_css,
+            js_jquery:message.attributes.js_jquery,
+            js_jquery_v:message.attributes.js_jquery_v,
+            js_bootstrap:message.attributes.js_bootstrap,
+            started:true
+          });
+      
+          tinyMCE.get('tinyeditor').setContent(content);
+          
+          self.forceUpdate();
         },
         error: function(message, error) {
             self.transitionTo('dashboard.messages');
@@ -112,7 +142,6 @@ var WriteMessage = React.createClass({
       editorPreview:true,
 
       summary:"",
-      content:"",
       base_css:"",
       custom_css:"",
       js_jquery:false,
@@ -120,7 +149,9 @@ var WriteMessage = React.createClass({
       js_bootstrap:false,
 
       sourceContent:false,
-      fullContent:""
+      fullContent:"",
+
+      content:startContent
 
     };
   },
@@ -129,50 +160,44 @@ var WriteMessage = React.createClass({
 
   onChangeContent: function(e) {
     this.setState({ 
-      content:e.target.getContent(),
-      fullContent:this.getFullContent()
+      content:e.target.getContent()
     });
   },
   
 
   onChangeBaseCSS: function(e) {
     this.setState({
-      base_css:e.target.value,
-      fullContent:this.getFullContent()
+      base_css:e.target.value
     });
     this.setFullContent();
   },
   onChangeCustomCSS: function(e) {
     this.setState({
-      custom_css:e.target.value,
-      fullContent:this.getFullContent()
+      custom_css:e.target.value
     });
-    this.setFullContent();
   },
   onChangeJSJQuery: function(e) {
     this.setState({
-      js_jquery:e.target.value,
-      fullContent:this.getFullContent()
+      js_jquery:!this.state.js_jquery
     });
-    this.setFullContent();
   },
   onChangeJSJQueryV: function(e) {
     this.setState({
-      js_jquery_v:e.target.value,
-      fullContent:this.getFullContent()
+      js_jquery_v:e.target.value
     });
-    this.setFullContent();
   },
   onChangeJSBootstrap: function(e) {
     this.setState({
-      js_bootstrap:e.target.value,
-      fullContent:this.getFullContent()
+      js_bootstrap:!this.state.js_bootstrap
     });
-    this.setFullContent();
   },
   onChangeSummary: function(e) {
     this.setState({ 
-      summary:e.target.value,
+      summary:e.target.value
+    });
+  },
+  onPreviewAsked: function(e){
+    this.setState({
       fullContent:this.getFullContent()
     });
   },
@@ -219,10 +244,11 @@ var WriteMessage = React.createClass({
     content += "</body>";
     content += "</html>"
 
-    content = content.replace("{js_jquery}","http://code.jquery.com/jquery-3.1.1.min.js");
-    content = content.replace("{js_jquery3.1.1}","http://code.jquery.com/jquery-3.1.1.min.js");
+    content = content.replace("{$js_jquery}","http://code.jquery.com/jquery-3.1.1.min.js");
+    content = content.replace("{$js_jquery3.1.1}","http://code.jquery.com/jquery-3.1.1.min.js");
     content = content.replace("{$bootstrap}","https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css");
-    content = content.replace("{js_bootstrap}","https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
+    content = content.replace("{$bootswatch_cerulean}", "https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css");
+    content = content.replace("{$js_bootstrap}","https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js");
 
     return content;
   },
@@ -276,6 +302,9 @@ var WriteMessage = React.createClass({
           var MessageCreator = Parse.Object.extend("MessageCreator");
           self.state.messageObject = new Message();
           self.state.messageObject.id = datas.messageId;
+          self.setState({
+            started:true
+          });
           return self.state.messageObject.fetch();
         },
         function(service, error) {
@@ -476,7 +505,9 @@ var WriteMessage = React.createClass({
           <div className={this.state.editorPreview?"col-lg-6":"hidden"}>
             <Panel header={<span>Preview</span>} >
               <div className="row">
-                <div className="col-sm-12">
+                <div className="col-sm-12 text-center">
+                  <button onClick={this.onPreviewAsked} className="btn btn-block btn-primary">Reload preview</button>
+                  <br />
                   <Frame>
                     <div>
                        <RawHtml.div>
