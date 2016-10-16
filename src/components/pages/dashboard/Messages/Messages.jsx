@@ -28,10 +28,28 @@ CounterPart.registerTranslations('de', {
 });
 
 var MessagesListBlock = React.createClass({
-  mixins: [ParseReact.Mixin,IntlMixin], // Enable query subscriptions
-  
+  mixins: [IntlMixin], // Enable query subscriptions
+
+
   getInitialState() {
+
+
+    var self = this;
+    this.props.parseQuery.find({
+      success: function(results) {
+        self.setState({
+          datas: results
+        });
+      },
+      error: function(error) {
+        alert("Error: " + error.code + " " + error.message);
+      }
+    });
+
     return {
+
+      datas:[],
+
       currentPage : 1,
       maxPage : 0,
       nbResults : 0,
@@ -58,11 +76,6 @@ var MessagesListBlock = React.createClass({
   },
 
 
-  observe: function() {
-    return {
-      services: this.props.parseQuery
-    };
-  },
 
   onActionClicked: function(e){
     this.setState({
@@ -76,16 +89,42 @@ var MessagesListBlock = React.createClass({
       actionObjectId:e 
     });
   },
+
+  removeFromData: function(object){
+    console.log(this.state.datas);
+    var i = this.state.datas.length-1;
+    var looping = true;
+
+    console.log(this.state.datas);
+    while(looping){
+      if (this.state.datas[i].id == this.state.actionObjectId){
+        this.state.datas.splice(i, 1); //Remove
+        looping=false;
+        console.log(this.state.datas);
+      }
+      if(i==0){
+        looping=false;
+      }
+      i--;
+    }
+    console.log("update");
+    this.setState({
+      actionObjectId:null
+    });
+  },
+
   onModalYes: function(e){
     if (this.state.actionModal){
       this.props.onButton(this.state.actionObjectId);
     }else if(this.state.deleteModal){
-      this.props.onDelete(this.state.actionObjectId)
+      this.props.onDelete(
+        this.state.actionObjectId,
+        this.removeFromData
+      );
     }
     this.setState({
       deleteModal:false,
-      actionModal:false,
-      actionObjectId:null
+      actionModal:false
     });
   },
   onModalNo: function(e){
@@ -98,8 +137,10 @@ var MessagesListBlock = React.createClass({
       
   
   render: function() {
+    console.log("render");
+        console.log(this.state.datas);
     // Render the menu with all the services available
-    this.state.nbResults = this.data.services.length; 
+    this.state.nbResults = this.state.datas.length; 
     this.state.maxPage = Math.ceil(this.state.nbResults/this.state.nbResultsPerPage);
     
     var showing = (this.state.currentPage*this.state.nbResultsPerPage)- (this.state.nbResultsPerPage-1);
@@ -118,7 +159,7 @@ var MessagesListBlock = React.createClass({
     
     var k = 0;
     for ( var i = (showing-1) ; i < to ; i ++){
-      displayedServices[k++] = this.data.services[i];
+      displayedServices[k++] = this.state.datas[i];
     }
   
     var odd = true ;
@@ -154,13 +195,13 @@ var MessagesListBlock = React.createClass({
                         <tbody> 
                         {
                           displayedServices.map(function(c) {
-                          
+                            console.log(c);
                             //var boundClick = this.onEditButton.bind(this, c.objectId);
-                            var boundClickAction = this.onActionClicked.bind(this,c.objectId);
-                            var boundClickDelete = this.onDeleteClicked.bind(this,c.objectId);
+                            var boundClickAction = this.onActionClicked.bind(this,c.id);
+                            var boundClickDelete = this.onDeleteClicked.bind(this,c.id);
                             return (<tr role="row">
                                 <td>{c.createdAt.toUTCString()}</td>
-                                <td>{c.summary}</td>
+                                <td>{c.get("summary")}</td>
                                 {(() => {
                                   if(this.props.buttonMessage!=null){
                                     return (
@@ -307,14 +348,14 @@ var Messages = React.createClass({
       );
   },
 
-  onDeleteMessage:function(objectId){
+  onDeleteMessage:function(objectId, callback){
     var Message = Parse.Object.extend("Message");
     var query = new Parse.Query(Message);
     query.get(objectId, {
       success: function(message) {
         message.destroy().then(
-          function(object){
-            this.transitionTo('dashboard.overview', this.props);
+          function(e){
+            callback();
           },
           function(error){
             alert('Failed to destroy object, with error code: ' + error.message);
@@ -327,14 +368,14 @@ var Messages = React.createClass({
     });
   },
 
-  onDeleteMessageCreator:function(objectId){
+  onDeleteMessageCreator:function(objectId, callback){
     var MessageCreator = Parse.Object.extend("MessageCreator");
     var query = new Parse.Query(MessageCreator);
     query.get(objectId, {
       success: function(messageCreator) {
         messageCreator.destroy().then(
-          function(object){
-            this.transitionTo('dashboard.overview', this.props);
+          function(e){
+            callback();
           },
           function(error){
             alert('Failed to destroy object, with error code: ' + error.message);
