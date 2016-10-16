@@ -35,7 +35,7 @@ var MessagesListBlock = React.createClass({
       currentPage : 1,
       maxPage : 0,
       nbResults : 0,
-      nbResultsPerPage : 10,
+      nbResultsPerPage : 4,
 
       deleteModal:false,
       actionModal:false,
@@ -133,17 +133,6 @@ var MessagesListBlock = React.createClass({
                     <div className="col-xs-12 col-sm-8 col-md-9 col-lg-9">
                       <small>{this.props.introSmall}</small>
                     </div>
-                    <div className="col-xs-12 col-sm-4 col-md-3 col-lg-3">
-                      <div className="dataTables_length" id="dataTables-example_length">
-                        <label>
-                        <select onChange={this.resultPerPageChangedHandler} name="selectEntries" aria-controls="ariaEntriesSelect" className="form-control input-sm">
-                         <option value="10">10</option>
-                         <option value="20">20</option>
-                         <option value="50">50</option>
-                        </select>&nbsp; entries</label>
-                      </div>
-                    </div>
-                    
                   </div>
 
                   <div className="row">
@@ -193,19 +182,30 @@ var MessagesListBlock = React.createClass({
                     </div>
                   </div>
                   <div className="row">
-                    <div className="col-sm-6">
+                    <div className="col-xs-3">
                       <div className="dataTables_info" id="dataTables-example_info" role="status" aria-live="polite">
                         Showing {showing} to {to} of {of} entries
                       </div>
                     </div>
-                    <div className="col-xs-12" >
-                    <center>
-                      <Pagination activePage={this.state.currentPage}
-                        items={this.state.maxPage} perPage={this.state.nbResultsPerPage} 
-                        first={true} last={true}
-                        prev={true} next={true}
-                        onSelect={ this.pageChangedHandler } /> 
-                                </center>
+                    <div className="col-xs-6" >
+                      <center>
+                        <Pagination activePage={this.state.currentPage}
+                          items={this.state.maxPage} perPage={this.state.nbResultsPerPage} 
+                          first={true} last={true}
+                          prev={true} next={true}
+                          onSelect={ this.pageChangedHandler } /> 
+                      </center>
+                    </div>
+                    <div className="col-xs-3">
+                      <div className="dataTables_length pull-right" id="dataTables-example_length">
+                        <label>
+                        <select onChange={this.resultPerPageChangedHandler} name="selectEntries" aria-controls="ariaEntriesSelect" className="form-control input-sm">
+                         <option value="10">4</option>
+                         <option value="10">10</option>
+                         <option value="20">20</option>
+                         <option value="50">50</option>
+                        </select>&nbsp; entries</label>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -262,7 +262,7 @@ var Messages = React.createClass({
   getInitialState() {
     return {
       listSent:false,
-      listPreview:false,
+      listPreview:true,
       listEdition:true
     };
   },
@@ -351,37 +351,16 @@ var Messages = React.createClass({
   render: function() {
     return (
       <div>
-      <br />
-         <div className="row">
-          <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-            <button onClick={this.swapListSent} className={this.state.listSent?"btn btn-block btn-primary":"btn btn-block btn-default"}>Sent</button>
-          </div>
-          <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-            <button onClick={this.swapListPreview} className={this.state.listPreview?"btn btn-block btn-primary":"btn btn-block btn-default"}>In preview</button>
-          </div>
-          <div className="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-            <button onClick={this.swapListEdition} className={this.state.listEdition?"btn btn-block btn-primary":"btn btn-block btn-default"}>In edition</button>
-          </div>
-        </div>
 
-        <div className={this.state.listSent?"row":"hidden"}>
-          <div className="col-lg-12">
-            <PageHeader>Messages sent</PageHeader>
-          </div>
-        </div>
 
-        <div className={this.state.listSent?"row":"hidden"}>    
-          <MessagesListBlock {...this.props} 
-            parseQuery={(new Parse.Query('Message')).equalTo("sent", true).equalTo("service", this.props.service.service).descending("createdAt")}
-            buttonMessage={null} 
-            onDelete={this.onDeleteMessage}
-            introSmall={"You can preview this message on your phone with the same account. "} 
-            />
-        </div>
-
-        <div className={this.state.listPreview?"row":"hidden"}>
-          <div className="col-lg-12">
-            <PageHeader>Messages in preview</PageHeader>
+        <div className="row">
+          <div className="col-xs-12">
+            
+            <PageHeader>Messages in preview
+              <button onClick={this.swapListPreview} className={this.state.listPreview?"btn btn-primary pull-right":"btn btn-default pull-right"}>
+                {(this.state.listPreview)?<i className="fa fa-caret-up"></i>:<i className="fa fa-caret-down"></i>}
+              </button>
+            </PageHeader>
           </div>
         </div>
 
@@ -395,9 +374,15 @@ var Messages = React.createClass({
             />
         </div>
 
-        <div className={this.state.listEdition?"row":"hidden"}>
+
+
+        <div className="row">
           <div className="col-lg-12">
-            <PageHeader>Messages in edition</PageHeader>
+            <PageHeader>Messages in edition
+              <button onClick={this.swapListEdition} className={this.state.listEdition?"btn btn-primary pull-right":"btn btn-default pull-right"}>
+                {(this.state.listEdition)?<i className="fa fa-caret-up"></i>:<i className="fa fa-caret-down"></i>}
+              </button>
+            </PageHeader>
           </div>
         </div>
 
@@ -409,7 +394,30 @@ var Messages = React.createClass({
             onDelete={this.onDeleteMessageCreator}
             introSmall={"Those messages are in edition mode. "} 
             />
+        </div>
+
+
+
+        <div className="row">
+          <div className="col-lg-12">
+            <PageHeader>Messages sent
+              <button onClick={this.swapListSent} className={this.state.listSent?"btn btn-primary pull-right":"btn btn-default pull-right"}>
+                {(this.state.listSent)?<i className="fa fa-caret-up"></i>:<i className="fa fa-caret-down"></i>}
+              </button>
+            </PageHeader>
           </div>
+        </div>
+
+        <div className={this.state.listSent?"row":"hidden"}>    
+          <MessagesListBlock {...this.props} 
+            parseQuery={(new Parse.Query('Message')).equalTo("sent", true).equalTo("service", this.props.service.service).descending("createdAt")}
+            buttonMessage={null} 
+            onDelete={this.onDeleteMessage}
+            introSmall={"You can preview this message on your phone with the same account. "} 
+            />
+        </div>
+
+
       </div>
     );
   }

@@ -5,7 +5,7 @@ import {NavDropdown, MenuItem, DropdownButton, Navbar, Nav, NavItem, Panel, Page
 
 import StatWidget from "../../../common/StatWidget.js";
 
-import Router from 'react-router';
+import Router, { Link, RouteHandler } from 'react-router';
 import ReactDOM from 'react-dom';
 import RawHtml from "react-raw-html"
 
