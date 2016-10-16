@@ -19,8 +19,18 @@ var LoginPage = React.createClass({
   mixins: [Router.Navigation],
 
   render: function(){
-    return <div className="col-md-4 col-md-offset-4">
+    return <div>
+      <div className="col-xs-12 col-md-10 col-md-offset-1">
+        
+        <div className="alert alert-warning alert-dismissible" role="alert">
+          <button type="button" className="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <p>By continuing to browse this site, you consent to set cookies to audience measurement purposes. No information will be sent to advertisers. </p>
+        </div>
+      
+      </div>
 
+      <div className="col-xs-12 col-md-4 col-md-offset-4">
+        
         <div className="text-center">
           <h1 className="login-brand-text">Smart Herald: Client Dashboard</h1>
           <h3 className="text-muted">Created by <a href="http://sinenco.com">sinenco.com</a></h3>
@@ -54,6 +64,7 @@ var LoginPage = React.createClass({
         </Panel>
         
       </div>
+    </div>
       
 
   },
