@@ -292,20 +292,22 @@ var WriteMessage = React.createClass({
 
 
   onCreateAsked: function(){
+    var self = this;
     var service = this.props.service.service;
-    Parse.Cloud.run('create_message_builder', 
+    Parse.Cloud.run('create_message_creator', 
       {
         serviceId: service.id 
       }).then(
         function(object) {
           var datas = JSON.parse(object);
           var MessageCreator = Parse.Object.extend("MessageCreator");
-          self.state.messageObject = new Message();
-          self.state.messageObject.id = datas.messageId;
+          var message = new MessageCreator();
+          message.id = datas.messageId;
           self.setState({
-            started:true
+            started:true,
+            messageObject:message
           });
-          return self.state.messageObject.fetch();
+          return message.fetch();
         },
         function(service, error) {
           alert('Failed to edit object, with error code: ' + error.message);
@@ -329,12 +331,16 @@ var WriteMessage = React.createClass({
       }).then(
         function(object) {
           self.setState({
-            build:true,
+            built:true,
             started:false
           });
         },
         function(service, error) {
-          alert('Failed to edit object, with error code: ' + error.message);
+          if(error.message == "must wait"){
+            alert('You must wait 30 minutes before sending a new message. ');
+          }else{
+            alert('Failed to build object, with error code: ' + error.message);
+          }
         }
       );
     }
@@ -382,6 +388,9 @@ var WriteMessage = React.createClass({
           <div className="col-xs-12">
             <p>The message has been built. You can see the result on your phone.</p>
           </div>
+          <div className="col-xs-12">
+            <Link to="dashboard.messages"><button className="btn btn-primary">Go to my messages</button></Link>
+          </div>
         </div>
 
         <div className={(!this.state.built && !this.state.started)?"row":"hidden"}>
@@ -392,7 +401,7 @@ var WriteMessage = React.createClass({
             <button className="btn btn-default" onClick={this.onCreateAsked}>Create a new one</button>
           </div>
           <div className="col-xs-12 col-md-6">
-            <button className="btn btn-primary">Go to my messages</button>
+            <Link to="dashboard.messages"><button className="btn btn-primary">Go to my messages</button></Link>
           </div>
 
         </div>
@@ -416,10 +425,10 @@ var WriteMessage = React.createClass({
 
             <div className="col-xs-12 col-sm-6 col-md-6 col-sm-push-2 col-lg-4">
               <div className="col-sm-6">
-                <Button bsStyle="btn btn-block btn-success" onClick={this.handleSave}>Save Message</Button>
+                <Button className="btn btn-block btn-success" onClick={this.handleSave}>Save Message</Button>
               </div>
               <div className="col-sm-6">
-                <Button bsStyle="btn btn-block btn-warning" onClick={this.handleBuild}>Build Message</Button>
+                <Button className="btn btn-block btn-warning" onClick={this.handleBuild}>Build Message</Button>
               </div>
             </div>
           </div>
